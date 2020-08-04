@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,7 +23,9 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using WebApi.Data;
 using WebApi.Helpers;
+using WebApi.Helpers.Exceptions;
 using WebApi.IServices;
+using WebApi.Models;
 using WebApi.Services;
 
 namespace WebApi
@@ -34,6 +37,7 @@ namespace WebApi
     {
         private readonly IWebHostEnvironment _env;
         private readonly IConfiguration _configuration;
+        private AppSettings _appSettings;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Startup"/> class.
@@ -67,10 +71,10 @@ namespace WebApi
             // Configure strongly typed settings objects.
             var appSettingsSection = _configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
-            var appSettings = appSettingsSection.Get<AppSettings>();
+            _appSettings = appSettingsSection.Get<AppSettings>();
 
             // Configure JWT authentication.
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             services
                 .AddAuthentication(configuration =>
                 {
@@ -161,9 +165,10 @@ namespace WebApi
         /// <param name="env">Provides information about the web hosting environment an application is running in.
         /// </param>
         /// <param name="appDbContext">The database context.</param>
+        /// <param name="passwordHelper">The helper object for working with passwords.</param>
         /// <param name="logger">The logger.</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AppDbContext appDbContext,
-            ILogger<Startup> logger)
+            IPasswordHelper passwordHelper, ILogger<Startup> logger)
         {
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 
@@ -182,6 +187,31 @@ namespace WebApi
 
             // Migrate any database changes on startup (includes initial database creation).
             appDbContext.Database.Migrate();
+
+            // Seed admin user.
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var db = serviceScope.ServiceProvider.GetService<AppDbContext>();
+                if (db.Users.FirstOrDefault(x => x.Username == _appSettings.AdminUsername) == null)
+                {
+                    var (passwordHash, passwordSalt) = passwordHelper.CreateHash(_appSettings.AdminPassword);
+
+                    var user = new User
+                    {
+                        Id = Guid.NewGuid(),
+                        Username = _appSettings.AdminUsername,
+                        Email = _appSettings.AdminEmail,
+                        CreatedAt = DateTime.UtcNow,
+                        IsActive = true,
+                        PasswordHash = passwordHash,
+                        PasswordSalt = passwordSalt,
+                        Role = "admin"
+                    };
+
+                    db.Users.Add(user);
+                    db.SaveChanges();
+                }
+            }
 
             // The localization middleware must be configured before
             // any middleware which might check the request culture.

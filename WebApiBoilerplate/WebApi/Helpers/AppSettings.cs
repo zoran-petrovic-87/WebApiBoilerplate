@@ -122,5 +122,29 @@ namespace WebApi.Helpers
         /// The URL that will be used to confirm password reset.
         /// </value>
         public string ResetPasswordUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the administrator username.
+        /// </summary>
+        /// <value>
+        /// The adminisrator username.
+        /// </value>
+        public string AdminUsername { get; set; }
+
+        /// <summary>
+        /// Gets or sets the administrator email.
+        /// </summary>
+        /// <value>
+        /// The administrator email.
+        /// </value>
+        public string AdminEmail { get; set; }
+
+        /// <summary>
+        /// Gets or sets the administrator password.
+        /// </summary>
+        /// <value>
+        /// The administrator password.
+        /// </value>
+        public string AdminPassword { get; set; }
     }
 }
