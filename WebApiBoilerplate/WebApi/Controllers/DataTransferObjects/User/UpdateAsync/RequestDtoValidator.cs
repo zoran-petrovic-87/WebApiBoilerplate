@@ -2,7 +2,7 @@ using FluentValidation;
 using Microsoft.Extensions.Localization;
 using WebApi.Resources.Localization;
 
-namespace WebApi.Controllers.DataTransferObjects.User.Update
+namespace WebApi.Controllers.DataTransferObjects.User.UpdateAsync
 {
     /// <summary>
     ///  Validator for the <seealso cref="RequestDto" />.

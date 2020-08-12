@@ -65,7 +65,7 @@ namespace WebApi.Services
         }
 
         /// <inheritdoc />
-        public async Task<Dto.Authenticate.ResponseDto> AuthenticateAsync(Dto.Authenticate.RequestDto dto)
+        public async Task<Dto.AuthenticateAsync.ResponseDto> AuthenticateAsync(Dto.AuthenticateAsync.RequestDto dto)
         {
             var user = await _db.Users.SingleOrDefaultAsync(x => x.Username == dto.Username && x.IsActive);
 
@@ -116,7 +116,7 @@ namespace WebApi.Services
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
 
-            return new Dto.Authenticate.ResponseDto
+            return new Dto.AuthenticateAsync.ResponseDto
             {
                 Id = user.Id,
                 Username = user.Username,
@@ -128,7 +128,7 @@ namespace WebApi.Services
         }
 
         /// <inheritdoc />
-        public async Task<Dto.Details.ResponseDto> RegisterAsync(Dto.Register.RequestDto dto)
+        public async Task<Dto.GetDetailsAsync.ResponseDto> RegisterAsync(Dto.RegisterAsync.RequestDto dto)
         {
             if (string.IsNullOrWhiteSpace(dto.Password))
                 throw new InvalidPasswordException(_l["Password is required."]);
@@ -163,7 +163,7 @@ namespace WebApi.Services
             await _db.Users.AddAsync(user);
             await _db.SaveChangesAsync();
 
-            return new Dto.Details.ResponseDto
+            return new Dto.GetDetailsAsync.ResponseDto
             {
                 Id = user.Id,
                 Username = user.Username,
@@ -190,18 +190,18 @@ namespace WebApi.Services
                     LastName = x.LastName,
                     Username = x.Username,
                     Email = x.Email,
-                    Role = x.Role == null ? null : new DtoRole.GetAll.ResponseDto {Id = x.Role.Id, Name = x.Role.Name}
+                    Role = x.Role == null ? null : new DtoRole.GetAllAsync.ResponseDto {Id = x.Role.Id, Name = x.Role.Name}
                 })
                 .GetPagedAsync(paginationFilter);
         }
 
         /// <inheritdoc />
-        public async Task<Dto.Details.ResponseDto> GetDetailsAsync(Guid id)
+        public async Task<Dto.GetDetailsAsync.ResponseDto> GetDetailsAsync(Guid id)
         {
             var user = await _db.Users.AsNoTracking()
                 .Include(x => x.Role)
                 .Where(x => x.Id == id)
-                .Select(x => new Dto.Details.ResponseDto
+                .Select(x => new Dto.GetDetailsAsync.ResponseDto
                 {
                     Id = x.Id,
                     Username = x.Username,
@@ -214,7 +214,7 @@ namespace WebApi.Services
                     IsActive = x.IsActive,
                     Role = x.Role == null
                         ? null
-                        : new DtoRole.GetAll.ResponseDto
+                        : new DtoRole.GetAllAsync.ResponseDto
                         {
                             Id = x.Role.Id, Name = x.Role.Name
                         }
@@ -225,8 +225,8 @@ namespace WebApi.Services
         }
 
         /// <inheritdoc />
-        public async Task<Dto.Details.ResponseDto> UpdateAsync(Guid requestedByUserId, Guid userId,
-            Dto.Update.RequestDto dto)
+        public async Task<Dto.GetDetailsAsync.ResponseDto> UpdateAsync(Guid requestedByUserId, Guid userId,
+            Dto.UpdateAsync.RequestDto dto)
         {
             if (userId != requestedByUserId) throw new ForbiddenException();
 
@@ -267,7 +267,7 @@ namespace WebApi.Services
 
             await _db.SaveChangesAsync();
 
-            return new Dto.Details.ResponseDto
+            return new Dto.GetDetailsAsync.ResponseDto
             {
                 Id = user.Id,
                 Username = user.Username,
@@ -280,7 +280,7 @@ namespace WebApi.Services
                 IsActive = user.IsActive,
                 Role = user.Role == null
                     ? null
-                    : new DtoRole.GetAll.ResponseDto
+                    : new DtoRole.GetAllAsync.ResponseDto
                     {
                         Id = user.Role.Id, Name = user.Role.Name
                     }
@@ -321,7 +321,7 @@ namespace WebApi.Services
         }
 
         /// <inheritdoc />
-        public async Task PasswordResetAsync(Dto.PasswordReset.RequestDto dto)
+        public async Task PasswordResetAsync(Dto.PasswordResetAsync.RequestDto dto)
         {
             var user = await _db.Users.FirstOrDefaultAsync(x => x.Email == dto.Email);
             if (user == null)
@@ -364,7 +364,7 @@ namespace WebApi.Services
         }
 
         /// <inheritdoc />
-        public async Task<Dto.ConfirmResetPassword.ResponseDto> ConfirmResetPasswordAsync(string code, string email)
+        public async Task<Dto.ConfirmResetPasswordAsync.ResponseDto> ConfirmResetPasswordAsync(string code, string email)
         {
             var user = await _db.Users.FirstOrDefaultAsync(x => x.Email == email && x.ResetPasswordCode == code);
             if (user == null) throw new EntityNotFoundException(_l["Invalid code."]);
@@ -381,7 +381,7 @@ namespace WebApi.Services
 
             await _db.SaveChangesAsync();
 
-            return new Dto.ConfirmResetPassword.ResponseDto
+            return new Dto.ConfirmResetPasswordAsync.ResponseDto
             {
                 Id = user.Id,
                 Username = user.Username,

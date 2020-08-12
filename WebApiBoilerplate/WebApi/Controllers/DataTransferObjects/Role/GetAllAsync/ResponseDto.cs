@@ -1,6 +1,6 @@
 using System;
 
-namespace WebApi.Controllers.DataTransferObjects.Role.GetAll
+namespace WebApi.Controllers.DataTransferObjects.Role.GetAllAsync
 {
     /// <summary>
     /// Data transfer object for the role summary response.

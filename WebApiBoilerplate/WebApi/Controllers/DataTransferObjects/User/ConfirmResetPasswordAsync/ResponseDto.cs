@@ -1,9 +1,9 @@
 using System;
 
-namespace WebApi.Controllers.DataTransferObjects.User.Authenticate
+namespace WebApi.Controllers.DataTransferObjects.User.ConfirmResetPasswordAsync
 {
     /// <summary>
-    /// Data transfer object for the authenticate response.
+    /// Data transfer object for the user reset password response.
     /// </summary>
     public class ResponseDto
     {
@@ -24,22 +24,6 @@ namespace WebApi.Controllers.DataTransferObjects.User.Authenticate
         public string Username { get; set; }
 
         /// <summary>
-        /// Gets or sets the first name.
-        /// </summary>
-        /// <value>
-        /// The first name.
-        /// </value>
-        public string FirstName { get; set; }
-
-        /// <summary>
-        /// Gets or sets the last name.
-        /// </summary>
-        /// <value>
-        /// The last name.
-        /// </value>
-        public string LastName { get; set; }
-
-        /// <summary>
         /// Gets or sets the email.
         /// </summary>
         /// <value>
@@ -48,11 +32,11 @@ namespace WebApi.Controllers.DataTransferObjects.User.Authenticate
         public string Email { get; set; }
 
         /// <summary>
-        /// Gets or sets the token.
+        /// Gets or sets the password.
         /// </summary>
         /// <value>
-        /// The token.
+        /// The password.
         /// </value>
-        public string Token { get; set; }
+        public string Password { get; set; }
     }
 }

@@ -1,9 +1,7 @@
-using System;
-
-namespace WebApi.Controllers.DataTransferObjects.User.Register
+namespace WebApi.Controllers.DataTransferObjects.User.UpdateAsync
 {
     /// <summary>
-    /// Data transfer object for the register user request.
+    /// Data transfer object for the user update request.
     /// </summary>
     public class RequestDto
     {
@@ -13,7 +11,7 @@ namespace WebApi.Controllers.DataTransferObjects.User.Register
         /// <value>
         /// The username.
         /// </value>
-        public string Username { get; set; }
+        public UpdateStringField Username { get; set; }
 
         /// <summary>
         /// Gets or sets the first name.
@@ -21,7 +19,7 @@ namespace WebApi.Controllers.DataTransferObjects.User.Register
         /// <value>
         /// The first name.
         /// </value>
-        public string FirstName { get; set; }
+        public UpdateStringField FirstName { get; set; }
 
         /// <summary>
         /// Gets or sets the last name.
@@ -29,7 +27,7 @@ namespace WebApi.Controllers.DataTransferObjects.User.Register
         /// <value>
         /// The last name.
         /// </value>
-        public string LastName { get; set; }
+        public UpdateStringField LastName { get; set; }
 
         /// <summary>
         /// Gets or sets the email.
@@ -37,7 +35,7 @@ namespace WebApi.Controllers.DataTransferObjects.User.Register
         /// <value>
         /// The email.
         /// </value>
-        public string Email { get; set; }
+        public UpdateStringField Email { get; set; }
 
         /// <summary>
         /// Gets or sets the password.
@@ -45,6 +43,6 @@ namespace WebApi.Controllers.DataTransferObjects.User.Register
         /// <value>
         /// The password.
         /// </value>
-        public string Password { get; set; }
+        public UpdateStringField Password { get; set; }
     }
 }

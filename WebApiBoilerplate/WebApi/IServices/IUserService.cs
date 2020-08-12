@@ -13,16 +13,16 @@ namespace WebApi.IServices
         /// <summary>
         /// Authenticates the specified user.
         /// </summary>
-        /// <param name="dto">The <see cref="DTO.Authenticate.RequestDto"/> data transfer object.</param>
+        /// <param name="dto">The <see cref="WebApi.Controllers.DataTransferObjects.User.AuthenticateAsync.RequestDto"/> data transfer object.</param>
         /// <returns>The user.</returns>
-        Task<DTO.Authenticate.ResponseDto> AuthenticateAsync(DTO.Authenticate.RequestDto dto);
+        Task<DTO.AuthenticateAsync.ResponseDto> AuthenticateAsync(DTO.AuthenticateAsync.RequestDto dto);
 
         /// <summary>
         /// Creates the new user.
         /// </summary>
-        /// <param name="dto">The <see cref="WebApi.Controllers.DataTransferObjects.User.Register.RequestDto"/> data transfer object.</param>
+        /// <param name="dto">The <see cref="WebApi.Controllers.DataTransferObjects.User.RegisterAsync.RequestDto"/> data transfer object.</param>
         /// <returns>The user details.</returns>
-        Task<DTO.Details.ResponseDto> RegisterAsync(DTO.Register.RequestDto dto);
+        Task<DTO.GetDetailsAsync.ResponseDto> RegisterAsync(DTO.RegisterAsync.RequestDto dto);
 
         /// <summary>
         /// Gets all users.
@@ -36,16 +36,16 @@ namespace WebApi.IServices
         /// </summary>
         /// <param name="id">The user identifier.</param>
         /// <returns>The user details.</returns>
-        Task<DTO.Details.ResponseDto> GetDetailsAsync(Guid id);
+        Task<DTO.GetDetailsAsync.ResponseDto> GetDetailsAsync(Guid id);
 
         /// <summary>
         /// Updates the specified user.
         /// </summary>
         /// <param name="requestedByUserId">The identifier of the user that made update request.</param>
         /// <param name="userId">The identifier of the user that should be updated.</param>
-        /// <param name="dto">The <see cref="DTO.Update.RequestDto"/> data transfer object.</param>
+        /// <param name="dto">The <see cref="WebApi.Controllers.DataTransferObjects.User.UpdateAsync.RequestDto"/> data transfer object.</param>
         /// <returns>The user details.</returns>
-        Task<DTO.Details.ResponseDto> UpdateAsync(Guid requestedByUserId, Guid userId, DTO.Update.RequestDto dto);
+        Task<DTO.GetDetailsAsync.ResponseDto> UpdateAsync(Guid requestedByUserId, Guid userId, DTO.UpdateAsync.RequestDto dto);
 
         /// <summary>
         /// Deletes the specified user.
@@ -65,9 +65,9 @@ namespace WebApi.IServices
         /// <summary>
         /// Resets te password by sending an email to the user.
         /// </summary>
-        /// <param name="dto">The <see cref="DTO.PasswordReset.RequestDto"/> data transfer object.</param>
+        /// <param name="dto">The <see cref="WebApi.Controllers.DataTransferObjects.User.PasswordResetAsync.RequestDto"/> data transfer object.</param>
         /// <returns>Task.</returns>
-        Task PasswordResetAsync(DTO.PasswordReset.RequestDto dto);
+        Task PasswordResetAsync(DTO.PasswordResetAsync.RequestDto dto);
 
         /// <summary>
         /// Confirms the reset password.
@@ -75,6 +75,6 @@ namespace WebApi.IServices
         /// <param name="code">The code that will be used to validate reset password request.</param>
         /// <param name="email">The email address of the user.</param>
         /// <returns>Task</returns>
-        Task<DTO.ConfirmResetPassword.ResponseDto> ConfirmResetPasswordAsync(string code, string email);
+        Task<DTO.ConfirmResetPasswordAsync.ResponseDto> ConfirmResetPasswordAsync(string code, string email);
     }
 }

@@ -55,6 +55,6 @@ namespace WebApi.Controllers.DataTransferObjects.User.GetAll
         /// <value>
         /// The role.
         /// </value>
-        public Role.GetAll.ResponseDto Role { get; set; }
+        public Role.GetAllAsync.ResponseDto Role { get; set; }
     }
 }

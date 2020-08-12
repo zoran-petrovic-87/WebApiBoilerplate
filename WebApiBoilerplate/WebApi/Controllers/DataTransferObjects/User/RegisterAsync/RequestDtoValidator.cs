@@ -2,7 +2,7 @@ using FluentValidation;
 using Microsoft.Extensions.Localization;
 using WebApi.Resources.Localization;
 
-namespace WebApi.Controllers.DataTransferObjects.User.Authenticate
+namespace WebApi.Controllers.DataTransferObjects.User.RegisterAsync
 {
     /// <summary>
     /// Validator for the <seealso cref="RequestDto" />.
@@ -16,6 +16,9 @@ namespace WebApi.Controllers.DataTransferObjects.User.Authenticate
         public RequestDtoValidator(IStringLocalizer<Translation> l)
         {
             RuleFor(x => x.Username).Username(l);
+            RuleFor(x => x.FirstName).FirstName(l);
+            RuleFor(x => x.LastName).LastName(l);
+            RuleFor(x => x.Email).Email(l);
             RuleFor(x => x.Password).Password(l);
         }
     }

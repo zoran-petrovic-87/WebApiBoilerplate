@@ -41,8 +41,8 @@ namespace WebApi.Controllers
         /// </returns>
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        public async Task<ActionResult<Dto.Authenticate.ResponseDto>> Authenticate(
-            [FromBody] Dto.Authenticate.RequestDto dto)
+        public async Task<ActionResult<Dto.AuthenticateAsync.ResponseDto>> AuthenticateAsync(
+            [FromBody] Dto.AuthenticateAsync.RequestDto dto)
         {
             try
             {
@@ -61,12 +61,12 @@ namespace WebApi.Controllers
         /// <returns>The HTTP response indicating if this request was successful or not.</returns>
         [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<ActionResult> Register([FromBody] Dto.Register.RequestDto dto)
+        public async Task<ActionResult> RegisterAsync([FromBody] Dto.RegisterAsync.RequestDto dto)
         {
             try
             {
                 var user = await _userService.RegisterAsync(dto);
-                return CreatedAtAction(nameof(Details), new {id = user.Id}, user);
+                return CreatedAtAction(nameof(GetDetailsAsync), new {id = user.Id}, user);
             }
             catch (EmailNotSentException ex)
             {
@@ -84,7 +84,7 @@ namespace WebApi.Controllers
         /// <param name="paginationFilter">The pagination filter.</param>
         /// <returns>The paginated HTTP response with list of users.</returns>
         [HttpGet]
-        public async Task<ActionResult<PagedResult<Dto.GetAll.ResponseDto>>> GetAll(
+        public async Task<ActionResult<PagedResult<Dto.GetAll.ResponseDto>>> GetAllAsync(
             [FromQuery] PaginationFilter paginationFilter)
         {
             return Ok(await _userService.GetAllAsync(paginationFilter));
@@ -96,7 +96,7 @@ namespace WebApi.Controllers
         /// <param name="id">The identifier.</param>
         /// <returns>The user details.</returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<Dto.Details.ResponseDto>> Details(Guid id)
+        public async Task<ActionResult<Dto.GetDetailsAsync.ResponseDto>> GetDetailsAsync(Guid id)
         {
             try
             {
@@ -119,7 +119,7 @@ namespace WebApi.Controllers
         /// <param name="dto">The request data.</param>
         /// <returns>HTTP response indicating if this request was successful or not.</returns>
         [HttpPatch("{id}")]
-        public async Task<IActionResult> Update(Guid id, [FromBody] Dto.Update.RequestDto dto)
+        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] Dto.UpdateAsync.RequestDto dto)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             var requestedByUserId = Guid.Parse(identity.FindFirst(ClaimTypes.Name).Value);
@@ -127,7 +127,7 @@ namespace WebApi.Controllers
             try
             {
                 var user = await _userService.UpdateAsync(requestedByUserId, id, dto);
-                return CreatedAtAction(nameof(Details), new {id = user.Id}, user);
+                return CreatedAtAction(nameof(GetDetailsAsync), new {id = user.Id}, user);
             }
             catch (ForbiddenException ex)
             {
@@ -149,7 +149,7 @@ namespace WebApi.Controllers
         /// <param name="id">The user identifier.</param>
         /// <returns>HTTP response indicating if this request was successful or not.</returns>
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<ActionResult> DeleteAsync(Guid id)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             var requestedByUserId = Guid.Parse(identity.FindFirst(ClaimTypes.Name).Value);
@@ -171,7 +171,7 @@ namespace WebApi.Controllers
         /// <returns>HTTP response indicating if this request was successful or not.</returns>
         [AllowAnonymous]
         [HttpGet("ConfirmEmail")]
-        public async Task<ActionResult> ConfirmEmail([FromQuery] string code)
+        public async Task<ActionResult> ConfirmEmailAsync([FromQuery] string code)
         {
             try
             {
@@ -191,7 +191,7 @@ namespace WebApi.Controllers
         /// <returns>HTTP response indicating if this request was successful or not.</returns>
         [AllowAnonymous]
         [HttpPost("PasswordReset")]
-        public async Task<ActionResult> PasswordReset([FromBody] Dto.PasswordReset.RequestDto dto)
+        public async Task<ActionResult> PasswordResetAsync([FromBody] Dto.PasswordResetAsync.RequestDto dto)
         {
             try
             {
@@ -216,7 +216,7 @@ namespace WebApi.Controllers
         /// <returns>HTTP response indicating if this request was successful or not.</returns>
         [AllowAnonymous]
         [HttpGet("ConfirmPasswordReset")]
-        public async Task<ActionResult> ConfirmPasswordReset([FromQuery] string code, [FromQuery] string email)
+        public async Task<ActionResult> ConfirmPasswordResetAsync([FromQuery] string code, [FromQuery] string email)
         {
             try
             {

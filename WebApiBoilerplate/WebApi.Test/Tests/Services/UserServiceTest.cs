@@ -86,7 +86,7 @@ namespace WebApi.Test.Tests.Services
         public async Task RegisterAsync_WhenCalled_CreatesUser()
         {
             // Arrange.
-            var dto = new DTO.Register.RequestDto
+            var dto = new DTO.RegisterAsync.RequestDto
             {
                 Username = "test_username",
                 FirstName = "My First Name",
@@ -126,7 +126,7 @@ namespace WebApi.Test.Tests.Services
         public async Task RegisterAsync_PasswordIsNullOrWhiteSpace_ThrowsInvalidPasswordException(string password)
         {
             // Arrange.
-            var dto = new DTO.Register.RequestDto
+            var dto = new DTO.RegisterAsync.RequestDto
             {
                 Username = "test_username",
                 FirstName = "My First Name",
@@ -152,7 +152,7 @@ namespace WebApi.Test.Tests.Services
         {
             // Arrange.
             var user = _factory.CreateUsers(1, "AbcAbc123")[0];
-            var dto = new DTO.Register.RequestDto
+            var dto = new DTO.RegisterAsync.RequestDto
             {
                 Username = user.Username,
                 FirstName = "My First Name",
@@ -178,7 +178,7 @@ namespace WebApi.Test.Tests.Services
         {
             // Arrange.
             var user = _factory.CreateUsers(1, "AbcAbc123")[0];
-            var dto = new DTO.Register.RequestDto
+            var dto = new DTO.RegisterAsync.RequestDto
             {
                 Username = "test_username",
                 FirstName = "My First Name",
@@ -203,7 +203,7 @@ namespace WebApi.Test.Tests.Services
         public async Task RegisterAsync_EmailNotSent_EmailNotSentException()
         {
             // Arrange.
-            var dto = new DTO.Register.RequestDto
+            var dto = new DTO.RegisterAsync.RequestDto
             {
                 Username = "test_username",
                 FirstName = "My First Name",
@@ -242,7 +242,7 @@ namespace WebApi.Test.Tests.Services
             // Arrange.
             const string password = "AbcAbc123";
             var user = _factory.CreateUsers(2, password)[0];
-            var dto = new DTO.Authenticate.RequestDto
+            var dto = new DTO.AuthenticateAsync.RequestDto
             {
                 Username = user.Username,
                 Password = password
@@ -278,7 +278,7 @@ namespace WebApi.Test.Tests.Services
         public async Task AuthenticateAsync_UserDoesNotExist_ThrowsEntityNotFoundException()
         {
             // Arrange.
-            var dto = new DTO.Authenticate.RequestDto
+            var dto = new DTO.AuthenticateAsync.RequestDto
             {
                 Username = "test_username",
                 Password = "AbcAbc123"
@@ -302,7 +302,7 @@ namespace WebApi.Test.Tests.Services
             // Arrange.
             const string password = "AbcAbc123";
             var user = _factory.CreateUsers(2, password)[0];
-            var dto = new DTO.Authenticate.RequestDto
+            var dto = new DTO.AuthenticateAsync.RequestDto
             {
                 Username = user.Username,
                 Password = password + "A"
@@ -328,7 +328,7 @@ namespace WebApi.Test.Tests.Services
             _appSettings.Value.MaxLoginFailedCount = 5;
             const string password = "AbcAbc123";
             var user = _factory.CreateUsers(2, password)[0];
-            var dto = new DTO.Authenticate.RequestDto
+            var dto = new DTO.AuthenticateAsync.RequestDto
             {
                 Username = user.Username,
                 Password = password + "A"
@@ -364,7 +364,7 @@ namespace WebApi.Test.Tests.Services
             _appSettings.Value.MaxLoginFailedCount = 5;
             const string password = "AbcAbc123";
             var user = _factory.CreateUsers(2, password)[0];
-            var dto = new DTO.Authenticate.RequestDto
+            var dto = new DTO.AuthenticateAsync.RequestDto
             {
                 Username = user.Username,
                 Password = password + "A"
@@ -495,7 +495,7 @@ namespace WebApi.Test.Tests.Services
             // Arrange.
             var user = _factory.CreateUsers(2, "AbcAbc123")[0];
 
-            var dto = new DTO.Update.RequestDto
+            var dto = new DTO.UpdateAsync.RequestDto
             {
                 Username = new UpdateStringField {NewValue = Guid.NewGuid().ToString()},
                 FirstName = new UpdateStringField {NewValue = Guid.NewGuid().ToString()},
@@ -530,7 +530,7 @@ namespace WebApi.Test.Tests.Services
             // Arrange.
             var user = _factory.CreateUsers(2, "AbcAbc123")[0];
 
-            var dto = new DTO.Update.RequestDto
+            var dto = new DTO.UpdateAsync.RequestDto
             {
                 Username = null,
                 FirstName = null,
@@ -564,7 +564,7 @@ namespace WebApi.Test.Tests.Services
         {
             // Arrange.
             var users = _factory.CreateUsers(2, "AbcAbc123");
-            var dto = new DTO.Update.RequestDto();
+            var dto = new DTO.UpdateAsync.RequestDto();
 
             // Act.
             Task Act() => _service.UpdateAsync(users[0].Id, users[1].Id, dto);
@@ -584,7 +584,7 @@ namespace WebApi.Test.Tests.Services
             // Arrange.
             _factory.CreateUsers(2, "AbcAbc123");
             var userId = Guid.NewGuid();
-            var dto = new DTO.Update.RequestDto();
+            var dto = new DTO.UpdateAsync.RequestDto();
 
             // Act.
             Task Act() => _service.UpdateAsync(userId, userId, dto);
@@ -603,7 +603,7 @@ namespace WebApi.Test.Tests.Services
         {
             // Arrange.
             var users = _factory.CreateUsers(2, "AbcAbc123");
-            var dto = new DTO.Update.RequestDto
+            var dto = new DTO.UpdateAsync.RequestDto
             {
                 Username = new UpdateStringField {NewValue = users[1].Username}
             };
@@ -627,7 +627,7 @@ namespace WebApi.Test.Tests.Services
             // Arrange.
             _appSettings.Value.MaxUnconfirmedEmailCount = 5;
             var user = _factory.CreateUsers(2, "AbcAbc123")[0];
-            var dto = new DTO.Update.RequestDto
+            var dto = new DTO.UpdateAsync.RequestDto
             {
                 Email = new UpdateStringField {NewValue = Guid.NewGuid() + "@example.com"}
             };
@@ -655,7 +655,7 @@ namespace WebApi.Test.Tests.Services
             // Arrange.
             _appSettings.Value.MaxUnconfirmedEmailCount = 5;
             var user = _factory.CreateUsers(2, "AbcAbc123")[0];
-            var dto = new DTO.Update.RequestDto
+            var dto = new DTO.UpdateAsync.RequestDto
             {
                 Email = new UpdateStringField {NewValue = Guid.NewGuid() + "@example.com"}
             };
@@ -686,7 +686,7 @@ namespace WebApi.Test.Tests.Services
         {
             // Arrange.
             var user = _factory.CreateUsers(2, "AbcAbc123")[0];
-            var dto = new DTO.Update.RequestDto
+            var dto = new DTO.UpdateAsync.RequestDto
             {
                 Email = new UpdateStringField {NewValue = user.Email}
             };
@@ -709,7 +709,7 @@ namespace WebApi.Test.Tests.Services
         {
             // Arrange.
             var users = _factory.CreateUsers(2, "AbcAbc123");
-            var dto = new DTO.Update.RequestDto
+            var dto = new DTO.UpdateAsync.RequestDto
             {
                 Email = new UpdateStringField {NewValue = Guid.NewGuid() + "@example.com"}
             };
@@ -869,7 +869,7 @@ namespace WebApi.Test.Tests.Services
             var user = _factory.CreateUsers(2, "AbcAbc123")[0];
             var emailService = Substitute.For<IEmailService>();
             var toEmail = "";
-            var dto = new DTO.PasswordReset.RequestDto {Email = user.Email};
+            var dto = new DTO.PasswordResetAsync.RequestDto {Email = user.Email};
             emailService
                 .SendAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
                     Arg.Any<string>(), Arg.Any<string>())
@@ -903,7 +903,7 @@ namespace WebApi.Test.Tests.Services
         {
             // Arrange.
             _factory.CreateUsers(2, "AbcAbc123");
-            var dto = new DTO.PasswordReset.RequestDto {Email = Guid.NewGuid() + "@example.com"};
+            var dto = new DTO.PasswordResetAsync.RequestDto {Email = Guid.NewGuid() + "@example.com"};
 
             // Act.
             Task Act() => _service.PasswordResetAsync(dto);
@@ -924,7 +924,7 @@ namespace WebApi.Test.Tests.Services
             // Arrange.
             _appSettings.Value.MaxResetPasswordCount = 5;
             var user = _factory.CreateUsers(2, "AbcAbc123")[0];
-            var dto = new DTO.PasswordReset.RequestDto {Email = user.Email};
+            var dto = new DTO.PasswordResetAsync.RequestDto {Email = user.Email};
 
             for (var i = 0; i < _appSettings.Value.MaxResetPasswordCount; i++)
                 await _service.PasswordResetAsync(dto);
@@ -947,7 +947,7 @@ namespace WebApi.Test.Tests.Services
             // Arrange.
             _appSettings.Value.MaxResetPasswordCount = 5;
             var user = _factory.CreateUsers(2, "AbcAbc123")[0];
-            var dto = new DTO.PasswordReset.RequestDto {Email = user.Email};
+            var dto = new DTO.PasswordResetAsync.RequestDto {Email = user.Email};
 
             for (var i = 0; i < _appSettings.Value.MaxResetPasswordCount; i++)
                 await _service.PasswordResetAsync(dto);
@@ -972,7 +972,7 @@ namespace WebApi.Test.Tests.Services
         {
             // Arrange.
             var user = _factory.CreateUsers(2, "AbcAbc123")[0];
-            var dto = new DTO.PasswordReset.RequestDto {Email = user.Email};
+            var dto = new DTO.PasswordResetAsync.RequestDto {Email = user.Email};
             var emailService = Substitute.For<IEmailService>();
             emailService
                 .SendAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),

@@ -1,4 +1,4 @@
-namespace WebApi.Controllers.DataTransferObjects.User.Authenticate
+namespace WebApi.Controllers.DataTransferObjects.User.AuthenticateAsync
 {
     /// <summary>
     /// Data transfer object for the authenticate request.

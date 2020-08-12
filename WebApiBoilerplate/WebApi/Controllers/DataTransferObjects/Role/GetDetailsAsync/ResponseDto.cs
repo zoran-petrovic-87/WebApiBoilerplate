@@ -1,6 +1,6 @@
 using System;
 
-namespace WebApi.Controllers.DataTransferObjects.Role.Details
+namespace WebApi.Controllers.DataTransferObjects.Role.GetDetailsAsync
 {
     /// <summary>
     /// Data transfer object for the role details response.
@@ -29,7 +29,7 @@ namespace WebApi.Controllers.DataTransferObjects.Role.Details
         /// <value>
         /// The the user that created this role.
         /// </value>
-        public virtual User.Details.ResponseDto CreatedBy { get; set; }
+        public virtual User.GetDetailsAsync.ResponseDto CreatedBy { get; set; }
 
         /// <summary>
         /// Gets or sets the date when the role was updated.
@@ -45,7 +45,7 @@ namespace WebApi.Controllers.DataTransferObjects.Role.Details
         /// <value>
         /// The the user that updated this role.
         /// </value>
-        public virtual User.Details.ResponseDto UpdatedBy { get; set; }
+        public virtual User.GetDetailsAsync.ResponseDto UpdatedBy { get; set; }
 
         /// <summary>
         /// Gets or sets the name.
