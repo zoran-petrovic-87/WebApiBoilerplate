@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.DataTransferObjects.User;
 using WebApi.Helpers;
 using WebApi.Helpers.Exceptions;
 using WebApi.Helpers.Pagination;
 using WebApi.IServices;
+using Dto = WebApi.Controllers.DataTransferObjects.User;
 
 namespace WebApi.Controllers
 {
@@ -41,11 +41,12 @@ namespace WebApi.Controllers
         /// </returns>
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        public async Task<ActionResult<AuthenticateResponseDto>> Authenticate([FromBody] AuthenticateRequestDto dto)
+        public async Task<ActionResult<Dto.Authenticate.ResponseDto>> Authenticate(
+            [FromBody] Dto.Authenticate.RequestDto dto)
         {
             try
             {
-                return Ok(await _userService.Authenticate(dto));
+                return Ok(await _userService.AuthenticateAsync(dto));
             }
             catch (AppException ex)
             {
@@ -54,18 +55,18 @@ namespace WebApi.Controllers
         }
 
         /// <summary>
-        /// Creates new user.
+        /// Register new user.
         /// </summary>
         /// <param name="dto">The request data.</param>
         /// <returns>The HTTP response indicating if this request was successful or not.</returns>
         [AllowAnonymous]
-        [HttpPost]
-        public async Task<ActionResult> Create([FromBody] UserCreateRequestDto dto)
+        [HttpPost("register")]
+        public async Task<ActionResult> Register([FromBody] Dto.Register.RequestDto dto)
         {
             try
             {
-                var user = await _userService.Create(dto);
-                return CreatedAtAction(nameof(GetById), new {id = user.Id}, user);
+                var user = await _userService.RegisterAsync(dto);
+                return CreatedAtAction(nameof(Details), new {id = user.Id}, user);
             }
             catch (EmailNotSentException ex)
             {
@@ -83,23 +84,23 @@ namespace WebApi.Controllers
         /// <param name="paginationFilter">The pagination filter.</param>
         /// <returns>The paginated HTTP response with list of users.</returns>
         [HttpGet]
-        public async Task<ActionResult<PagedResult<UserSummaryResponseDto>>> GetAll(
+        public async Task<ActionResult<PagedResult<Dto.GetAll.ResponseDto>>> GetAll(
             [FromQuery] PaginationFilter paginationFilter)
         {
-            return Ok(await _userService.GetAll(paginationFilter));
+            return Ok(await _userService.GetAllAsync(paginationFilter));
         }
 
         /// <summary>
-        /// Gets the user by identifier.
+        /// Gets the user details.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns>The user details.</returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserDetailsResponseDto>> GetById(Guid id)
+        public async Task<ActionResult<Dto.Details.ResponseDto>> Details(Guid id)
         {
             try
             {
-                return Ok(await _userService.GetById(id));
+                return Ok(await _userService.GetDetailsAsync(id));
             }
             catch (EntityNotFoundException ex)
             {
@@ -118,15 +119,15 @@ namespace WebApi.Controllers
         /// <param name="dto">The request data.</param>
         /// <returns>HTTP response indicating if this request was successful or not.</returns>
         [HttpPatch("{id}")]
-        public async Task<IActionResult> Update(Guid id, [FromBody] UserUpdateRequestDto dto)
+        public async Task<IActionResult> Update(Guid id, [FromBody] Dto.Update.RequestDto dto)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             var requestedByUserId = Guid.Parse(identity.FindFirst(ClaimTypes.Name).Value);
 
             try
             {
-                var user = await _userService.Update(requestedByUserId, id, dto);
-                return CreatedAtAction(nameof(GetById), new {id = user.Id}, user);
+                var user = await _userService.UpdateAsync(requestedByUserId, id, dto);
+                return CreatedAtAction(nameof(Details), new {id = user.Id}, user);
             }
             catch (ForbiddenException ex)
             {
@@ -154,7 +155,7 @@ namespace WebApi.Controllers
             var requestedByUserId = Guid.Parse(identity.FindFirst(ClaimTypes.Name).Value);
             try
             {
-                await _userService.Delete(requestedByUserId, id);
+                await _userService.DeleteAsync(requestedByUserId, id);
                 return NoContent();
             }
             catch (ForbiddenException ex)
@@ -174,7 +175,7 @@ namespace WebApi.Controllers
         {
             try
             {
-                await _userService.ConfirmEmail(code);
+                await _userService.ConfirmEmailAsync(code);
                 return NoContent();
             }
             catch (AppException ex)
@@ -190,11 +191,11 @@ namespace WebApi.Controllers
         /// <returns>HTTP response indicating if this request was successful or not.</returns>
         [AllowAnonymous]
         [HttpPost("PasswordReset")]
-        public async Task<ActionResult> PasswordReset([FromBody] PasswordResetRequestDto dto)
+        public async Task<ActionResult> PasswordReset([FromBody] Dto.PasswordReset.RequestDto dto)
         {
             try
             {
-                await _userService.PasswordReset(dto);
+                await _userService.PasswordResetAsync(dto);
                 return NoContent();
             }
             catch (EmailNotSentException ex)
@@ -219,7 +220,7 @@ namespace WebApi.Controllers
         {
             try
             {
-                return Ok(await _userService.ConfirmResetPassword(code, HttpUtility.UrlDecode(email)));
+                return Ok(await _userService.ConfirmResetPasswordAsync(code, HttpUtility.UrlDecode(email)));
             }
             catch (AppException ex)
             {

@@ -2,12 +2,12 @@ using System;
 
 // ReSharper disable MemberCanBePrivate.Global
 
-namespace WebApi.DataTransferObjects.User
+namespace WebApi.Controllers.DataTransferObjects.User.Details
 {
     /// <summary>
     /// Data transfer object for the user details response.
     /// </summary>
-    public class UserDetailsResponseDto
+    public class ResponseDto
     {
         /// <summary>
         /// Gets or sets the identifier.
@@ -55,7 +55,7 @@ namespace WebApi.DataTransferObjects.User
         /// <value>
         /// The role.
         /// </value>
-        public string Role { get; set; }
+        public Role.GetAll.ResponseDto Role { get; set; }
 
         /// <summary>
         /// Gets or sets the date when this user was created.
@@ -88,30 +88,5 @@ namespace WebApi.DataTransferObjects.User
         ///   <c>true</c> if this user is active; otherwise, <c>false</c>.
         /// </value>
         public bool IsActive { get; set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UserDetailsResponseDto"/> class.
-        /// </summary>
-        public UserDetailsResponseDto()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UserDetailsResponseDto"/> class.
-        /// </summary>
-        /// <param name="user">The user.</param>
-        public UserDetailsResponseDto(Models.User user)
-        {
-            Id = user.Id;
-            Username = user.Username;
-            FirstName = user.FirstName;
-            LastName = user.LastName;
-            Email = user.Email;
-            CreatedAt = user.CreatedAt;
-            UpdatedAt = user.UpdatedAt;
-            LastLoginAt = user.LastLoginAt;
-            IsActive = user.IsActive;
-            Role = user.Role;
-        }
     }
 }

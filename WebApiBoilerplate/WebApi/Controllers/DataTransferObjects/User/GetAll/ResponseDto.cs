@@ -2,12 +2,12 @@ using System;
 
 // ReSharper disable MemberCanBePrivate.Global
 
-namespace WebApi.DataTransferObjects.User
+namespace WebApi.Controllers.DataTransferObjects.User.GetAll
 {
     /// <summary>
     /// Data transfer object for the user summary response.
     /// </summary>
-    public class UserSummaryResponseDto
+    public class ResponseDto
     {
         /// <summary>
         /// Gets or sets the identifier.
@@ -55,27 +55,6 @@ namespace WebApi.DataTransferObjects.User
         /// <value>
         /// The role.
         /// </value>
-        public string Role { get; set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UserSummaryResponseDto"/> class.
-        /// </summary>
-        public UserSummaryResponseDto()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UserSummaryResponseDto"/> class.
-        /// </summary>
-        /// <param name="user">The user.</param>
-        public UserSummaryResponseDto(Models.User user)
-        {
-            Id = user.Id;
-            FirstName = user.FirstName;
-            LastName = user.LastName;
-            Username = user.Username;
-            Email = user.Email;
-            Role = user.Role;
-        }
+        public Role.GetAll.ResponseDto Role { get; set; }
     }
 }

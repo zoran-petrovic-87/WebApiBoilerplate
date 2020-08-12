@@ -1,12 +1,20 @@
 using System;
 
-namespace WebApi.DataTransferObjects.User
+namespace WebApi.Controllers.DataTransferObjects.User.Authenticate
 {
     /// <summary>
-    /// Data transfer object for the create user request.
+    /// Data transfer object for the authenticate response.
     /// </summary>
-    public class UserCreateRequestDto
+    public class ResponseDto
     {
+        /// <summary>
+        /// Gets or sets the identifier.
+        /// </summary>
+        /// <value>
+        /// The identifier.
+        /// </value>
+        public Guid Id { get; set; }
+
         /// <summary>
         /// Gets or sets the username.
         /// </summary>
@@ -40,27 +48,11 @@ namespace WebApi.DataTransferObjects.User
         public string Email { get; set; }
 
         /// <summary>
-        /// Gets or sets the password.
+        /// Gets or sets the token.
         /// </summary>
         /// <value>
-        /// The password.
+        /// The token.
         /// </value>
-        public string Password { get; set; }
-
-        /// <summary>
-        /// Creates the user from available data in this object.
-        /// </summary>
-        /// <returns>The user.</returns>
-        public Models.User CreateUser()
-        {
-            return new Models.User
-            {
-                Id = Guid.NewGuid(),
-                FirstName = FirstName,
-                LastName = LastName,
-                Username = Username,
-                Email = Email
-            };
-        }
+        public string Token { get; set; }
     }
 }

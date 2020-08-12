@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using FluentValidation.AspNetCore;
@@ -26,7 +27,9 @@ using WebApi.Helpers;
 using WebApi.Helpers.Exceptions;
 using WebApi.IServices;
 using WebApi.Models;
+using WebApi.Models.EnumerationTypes;
 using WebApi.Services;
+using Role = WebApi.Models.Role;
 
 namespace WebApi
 {
@@ -56,6 +59,12 @@ namespace WebApi
         /// <param name="services">Used to specify the contract for a collection of service descriptors.</param>
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequireAdminRole",
+                    policy => policy.RequireRole(Models.EnumerationTypes.Role.Admin.ToString()));
+            });
+
             services.AddDbContext<AppDbContext>();
 
             services.AddHealthChecks().AddDbContextCheck<AppDbContext>();
@@ -87,11 +96,21 @@ namespace WebApi
                     {
                         OnTokenValidated = context =>
                         {
-                            var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
+                            var db = context.HttpContext.RequestServices.GetRequiredService<AppDbContext>();
                             var userId = context.Principal.Identity.Name;
-                            if (userId == null || userService.GetById(Guid.Parse(userId)) == null)
+                            if (userId == null) context.Fail("Unauthorized");
+
+                            var user = db.Users.AsNoTracking().Include(x => x.Role)
+                                .FirstOrDefault(x => x.Id == Guid.Parse(userId));
+
+                            if (user != null)
                             {
-                                // Return "Unauthorized" if user no longer exists.
+                                var claims = new List<Claim> {new Claim(ClaimTypes.Role, user.Role.Name)};
+                                var appIdentity = new ClaimsIdentity(claims);
+                                context.Principal.AddIdentity(appIdentity);
+                            }
+                            else
+                            {
                                 context.Fail("Unauthorized");
                             }
 
@@ -116,6 +135,7 @@ namespace WebApi
                 const string xmlFile = "ClassLibrary.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 configuration.IncludeXmlComments(xmlPath);
+                configuration.CustomSchemaIds(type => type.ToString());
                 configuration.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description =
@@ -188,7 +208,7 @@ namespace WebApi
             // Migrate any database changes on startup (includes initial database creation).
             appDbContext.Database.Migrate();
 
-            // Seed admin user.
+            // Seed admin user and role.
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
                 var db = serviceScope.ServiceProvider.GetService<AppDbContext>();
@@ -204,11 +224,22 @@ namespace WebApi
                         CreatedAt = DateTime.UtcNow,
                         IsActive = true,
                         PasswordHash = passwordHash,
-                        PasswordSalt = passwordSalt,
-                        Role = "admin"
+                        PasswordSalt = passwordSalt
                     };
 
                     db.Users.Add(user);
+                    db.SaveChanges();
+
+                    var role = new Role
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = Models.EnumerationTypes.Role.Admin.ToString(),
+                        CreatedById = user.Id
+                    };
+
+                    db.Roles.Add(role);
+                    user.RoleId = role.Id;
+
                     db.SaveChanges();
                 }
             }

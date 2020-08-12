@@ -2,9 +2,10 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApi.Data;
 
-namespace WebApi.Migrations
+namespace WebApi.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -13,7 +14,7 @@ namespace WebApi.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.3");
+                .HasAnnotation("ProductVersion", "3.1.4");
 
             modelBuilder.Entity("WebApi.Models.Log", b =>
                 {
@@ -47,20 +48,61 @@ namespace WebApi.Migrations
                     b.ToTable("Logs");
                 });
 
-            modelBuilder.Entity("WebApi.Models.User", b =>
+            modelBuilder.Entity("WebApi.Models.Role", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Email")
+                    b.Property<Guid>("CreatedById")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("FirstName")
+                    b.Property<string>("Description")
                         .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(64);
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("UpdatedById")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("UpdatedById");
+
+                    b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("WebApi.Models.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(320);
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(30);
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("INTEGER");
@@ -69,7 +111,8 @@ namespace WebApi.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(30);
 
                     b.Property<DateTime?>("LoginFailedAt")
                         .HasColumnType("TEXT");
@@ -92,7 +135,7 @@ namespace WebApi.Migrations
                     b.Property<DateTime?>("ResetPasswordCreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Role")
+                    b.Property<Guid?>("RoleId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("UnconfirmedEmail")
@@ -110,12 +153,55 @@ namespace WebApi.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Username")
+                    b.Property<Guid?>("UpdatedById")
                         .HasColumnType("TEXT");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(20);
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("IsActive");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("UpdatedById");
+
+                    b.HasIndex("Username");
+
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("WebApi.Models.Role", b =>
+                {
+                    b.HasOne("WebApi.Models.User", "CreatedBy")
+                        .WithMany("CreatedRoles")
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebApi.Models.User", "UpdatedBy")
+                        .WithMany("UpdatedRoles")
+                        .HasForeignKey("UpdatedById");
+                });
+
+            modelBuilder.Entity("WebApi.Models.User", b =>
+                {
+                    b.HasOne("WebApi.Models.User", "CreatedBy")
+                        .WithMany("CreatedUsers")
+                        .HasForeignKey("CreatedById");
+
+                    b.HasOne("WebApi.Models.Role", "Role")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId");
+
+                    b.HasOne("WebApi.Models.User", "UpdatedBy")
+                        .WithMany("UpdatedUsers")
+                        .HasForeignKey("UpdatedById");
                 });
 #pragma warning restore 612, 618
         }

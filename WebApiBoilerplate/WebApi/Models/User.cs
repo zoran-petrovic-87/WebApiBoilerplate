@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace WebApi.Models
 {
@@ -56,6 +57,22 @@ namespace WebApi.Models
         public DateTime CreatedAt { get; set; }
 
         /// <summary>
+        /// Gets or sets the identifier of the user that created this user.
+        /// </summary>
+        /// <value>
+        /// The identifier of the user that created this user.
+        /// </value>
+        public Guid? CreatedById { get; set; }
+
+        /// <summary>
+        /// Gets or sets the the user that created this user.
+        /// </summary>
+        /// <value>
+        /// The the user that created this user.
+        /// </value>
+        public virtual User CreatedBy { get; set; }
+
+        /// <summary>
         /// Gets or sets the date when the user account was updated.
         /// </summary>
         /// <value>
@@ -64,12 +81,36 @@ namespace WebApi.Models
         public DateTime? UpdatedAt { get; set; }
 
         /// <summary>
+        /// Gets or sets the identifier of the user that updated this user.
+        /// </summary>
+        /// <value>
+        /// The identifier of the user that updated this user.
+        /// </value>
+        public Guid? UpdatedById { get; set; }
+
+        /// <summary>
+        /// Gets or sets the the user that updated this user.
+        /// </summary>
+        /// <value>
+        /// The the user that updated this user.
+        /// </value>
+        public virtual User UpdatedBy { get; set; }
+
+        /// <summary>
+        /// Gets or sets the role identifier.
+        /// </summary>
+        /// <value>
+        /// The role identifier.
+        /// </value>
+        public Guid? RoleId { get; set; }
+
+        /// <summary>
         /// Gets or sets the role.
         /// </summary>
         /// <value>
         /// The role.
         /// </value>
-        public string Role { get; set; }
+        public virtual Role Role { get; set; }
 
         /// <summary>
         /// Gets or sets the latest date when the user was successfully logged in.
@@ -174,5 +215,37 @@ namespace WebApi.Models
         ///   <c>true</c> if this user is active; otherwise, <c>false</c>.
         /// </value>
         public bool IsActive { get; set; }
+
+        /// <summary>
+        /// Gets or sets the users that were created by this user.
+        /// </summary>
+        /// <value>
+        /// The users that were created by this user.
+        /// </value>
+        public virtual ICollection<User> CreatedUsers { get; set; }
+
+        /// <summary>
+        /// Gets or sets the users that were updated by this user.
+        /// </summary>
+        /// <value>
+        /// The users that were updated by this user.
+        /// </value>
+        public virtual ICollection<User> UpdatedUsers { get; set; }
+
+        /// <summary>
+        /// Gets or sets the roles created by this user.
+        /// </summary>
+        /// <value>
+        /// The roles created by this user.
+        /// </value>
+        public virtual ICollection<Role> CreatedRoles { get; set; }
+
+        /// <summary>
+        /// Gets or sets the roles updated by this user.
+        /// </summary>
+        /// <value>
+        /// The roles updated by this user.
+        /// </value>
+        public virtual ICollection<Role> UpdatedRoles { get; set; }
     }
 }

@@ -2,12 +2,12 @@ using FluentValidation;
 using Microsoft.Extensions.Localization;
 using WebApi.Resources.Localization;
 
-namespace WebApi.DataTransferObjects.User
+namespace WebApi.Controllers.DataTransferObjects.User.Update
 {
     /// <summary>
-    ///  Validator for the <seealso cref="UserUpdateRequestDto" />.
+    ///  Validator for the <seealso cref="RequestDto" />.
     /// </summary>
-    public class UserUpdateRequestDtoValidator : AbstractValidator<UserUpdateRequestDto>
+    public class UserUpdateRequestDtoValidator : AbstractValidator<RequestDto>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="UserUpdateRequestDtoValidator"/> class.

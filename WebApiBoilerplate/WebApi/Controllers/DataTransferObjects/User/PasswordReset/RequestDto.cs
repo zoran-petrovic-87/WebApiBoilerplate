@@ -1,11 +1,9 @@
-using System;
-
-namespace WebApi.DataTransferObjects.User
+namespace WebApi.Controllers.DataTransferObjects.User.PasswordReset
 {
     /// <summary>
     /// Data transfer object for the password reset request.
     /// </summary>
-    public class PasswordResetRequestDto
+    public class RequestDto
     {
         /// <summary>
         /// Gets or sets the email.

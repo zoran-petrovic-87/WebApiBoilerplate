@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.Localization;
 
-namespace WebApi.DataTransferObjects
+namespace WebApi.Controllers.DataTransferObjects
 {
     /// <summary>
     /// The extension methods for reusable validation rules.

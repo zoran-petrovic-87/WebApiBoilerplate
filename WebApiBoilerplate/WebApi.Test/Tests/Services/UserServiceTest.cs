@@ -8,18 +8,17 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using NSubstitute;
+using WebApi.Controllers.DataTransferObjects;
 using WebApi.Data;
-using WebApi.DataTransferObjects;
-using WebApi.DataTransferObjects.User;
 using WebApi.Helpers;
 using WebApi.Helpers.Exceptions;
 using WebApi.Helpers.Pagination;
 using WebApi.IServices;
-using WebApi.Models;
 using WebApi.Resources.Localization;
 using WebApi.Services;
 using WebApi.Test.Helpers;
 using Xunit;
+using DTO = WebApi.Controllers.DataTransferObjects.User;
 
 namespace WebApi.Test.Tests.Services
 {
@@ -76,7 +75,7 @@ namespace WebApi.Test.Tests.Services
             _db.Dispose();
         }
 
-        #region Create
+        #region RegisterAsync
 
         /// <summary>
         /// Tests creating a user.
@@ -84,10 +83,10 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task Create_WhenCalled_CreatesUser()
+        public async Task RegisterAsync_WhenCalled_CreatesUser()
         {
             // Arrange.
-            var dto = new UserCreateRequestDto
+            var dto = new DTO.Register.RequestDto
             {
                 Username = "test_username",
                 FirstName = "My First Name",
@@ -97,7 +96,7 @@ namespace WebApi.Test.Tests.Services
             };
 
             // Act.
-            var response = await _service.Create(dto);
+            var response = await _service.RegisterAsync(dto);
 
             // Assert.
             Assert.Equal(dto.Username, response.Username);
@@ -124,10 +123,10 @@ namespace WebApi.Test.Tests.Services
         [InlineData(null)]
         [InlineData("")]
         [InlineData("   ")]
-        public async Task Create_PasswordIsNullOrWhiteSpace_ThrowsInvalidPasswordException(string password)
+        public async Task RegisterAsync_PasswordIsNullOrWhiteSpace_ThrowsInvalidPasswordException(string password)
         {
             // Arrange.
-            var dto = new UserCreateRequestDto
+            var dto = new DTO.Register.RequestDto
             {
                 Username = "test_username",
                 FirstName = "My First Name",
@@ -137,7 +136,7 @@ namespace WebApi.Test.Tests.Services
             };
 
             // Act.
-            Task Act() => _service.Create(dto);
+            Task Act() => _service.RegisterAsync(dto);
 
             // Assert.
             await Assert.ThrowsAsync<InvalidPasswordException>(Act);
@@ -149,11 +148,11 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task Create_UsernameIsTaken_ThrowsUsernameTakenException()
+        public async Task RegisterAsync_UsernameIsTaken_ThrowsUsernameTakenException()
         {
             // Arrange.
             var user = _factory.CreateUsers(1, "AbcAbc123")[0];
-            var dto = new UserCreateRequestDto
+            var dto = new DTO.Register.RequestDto
             {
                 Username = user.Username,
                 FirstName = "My First Name",
@@ -163,7 +162,7 @@ namespace WebApi.Test.Tests.Services
             };
 
             // Act.
-            Task Act() => _service.Create(dto);
+            Task Act() => _service.RegisterAsync(dto);
 
             // Assert.
             await Assert.ThrowsAsync<UsernameTakenException>(Act);
@@ -175,11 +174,11 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task Create_EmailIsTaken_ThrowsEmailTakenException()
+        public async Task RegisterAsync_EmailIsTaken_ThrowsEmailTakenException()
         {
             // Arrange.
             var user = _factory.CreateUsers(1, "AbcAbc123")[0];
-            var dto = new UserCreateRequestDto
+            var dto = new DTO.Register.RequestDto
             {
                 Username = "test_username",
                 FirstName = "My First Name",
@@ -189,7 +188,7 @@ namespace WebApi.Test.Tests.Services
             };
 
             // Act.
-            Task Act() => _service.Create(dto);
+            Task Act() => _service.RegisterAsync(dto);
 
             // Assert.
             await Assert.ThrowsAsync<EmailTakenException>(Act);
@@ -201,10 +200,10 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task Create_EmailNotSent_EmailNotSentException()
+        public async Task RegisterAsync_EmailNotSent_EmailNotSentException()
         {
             // Arrange.
-            var dto = new UserCreateRequestDto
+            var dto = new DTO.Register.RequestDto
             {
                 Username = "test_username",
                 FirstName = "My First Name",
@@ -222,7 +221,7 @@ namespace WebApi.Test.Tests.Services
                 _passwordHelper);
 
             // Act.
-            Task Act() => service.Create(dto);
+            Task Act() => service.RegisterAsync(dto);
 
             // Assert.
             await Assert.ThrowsAsync<EmailNotSentException>(Act);
@@ -230,7 +229,7 @@ namespace WebApi.Test.Tests.Services
 
         #endregion
 
-        #region Authenticate
+        #region AuthenticateAsync
 
         /// <summary>
         /// Tests user authentication.
@@ -238,19 +237,19 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task Authenticate_WhenCalled_AuthenticatesUser()
+        public async Task AuthenticateAsync_WhenCalled_AuthenticatesUser()
         {
             // Arrange.
             const string password = "AbcAbc123";
             var user = _factory.CreateUsers(2, password)[0];
-            var dto = new AuthenticateRequestDto
+            var dto = new DTO.Authenticate.RequestDto
             {
                 Username = user.Username,
                 Password = password
             };
 
             // Act.
-            var response = await _service.Authenticate(dto);
+            var response = await _service.AuthenticateAsync(dto);
 
             // Assert.
             Assert.Equal(dto.Username, response.Username);
@@ -276,17 +275,17 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task Authenticate_UserDoesNotExist_ThrowsEntityNotFoundException()
+        public async Task AuthenticateAsync_UserDoesNotExist_ThrowsEntityNotFoundException()
         {
             // Arrange.
-            var dto = new AuthenticateRequestDto
+            var dto = new DTO.Authenticate.RequestDto
             {
                 Username = "test_username",
                 Password = "AbcAbc123"
             };
 
             // Act.
-            Task Act() => _service.Authenticate(dto);
+            Task Act() => _service.AuthenticateAsync(dto);
 
             // Assert.
             await Assert.ThrowsAsync<EntityNotFoundException>(Act);
@@ -298,19 +297,19 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task Authenticate_IncorrectPassword_ThrowsIncorrectPasswordException()
+        public async Task AuthenticateAsync_IncorrectPassword_ThrowsIncorrectPasswordException()
         {
             // Arrange.
             const string password = "AbcAbc123";
             var user = _factory.CreateUsers(2, password)[0];
-            var dto = new AuthenticateRequestDto
+            var dto = new DTO.Authenticate.RequestDto
             {
                 Username = user.Username,
                 Password = password + "A"
             };
 
             // Act.
-            Task Act() => _service.Authenticate(dto);
+            Task Act() => _service.AuthenticateAsync(dto);
 
             // Assert.
             await Assert.ThrowsAsync<IncorrectPasswordException>(Act);
@@ -323,13 +322,13 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task Authenticate_TooManyFailedLoginAttempts_ThrowsTooManyFailedLoginAttemptsException()
+        public async Task AuthenticateAsync_TooManyFailedLoginAttempts_ThrowsTooManyFailedLoginAttemptsException()
         {
             // Arrange.
             _appSettings.Value.MaxLoginFailedCount = 5;
             const string password = "AbcAbc123";
             var user = _factory.CreateUsers(2, password)[0];
-            var dto = new AuthenticateRequestDto
+            var dto = new DTO.Authenticate.RequestDto
             {
                 Username = user.Username,
                 Password = password + "A"
@@ -339,7 +338,7 @@ namespace WebApi.Test.Tests.Services
             {
                 try
                 {
-                    await _service.Authenticate(dto);
+                    await _service.AuthenticateAsync(dto);
                 }
                 catch (IncorrectPasswordException)
                 {
@@ -347,7 +346,7 @@ namespace WebApi.Test.Tests.Services
             }
 
             // Act.
-            Task Act() => _service.Authenticate(dto);
+            Task Act() => _service.AuthenticateAsync(dto);
 
             // Assert.
             await Assert.ThrowsAsync<TooManyFailedLoginAttemptsException>(Act);
@@ -359,13 +358,13 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task Authenticate_TooManyFailedLoginAttemptsButWaitingTimePassed_AuthenticatesUser()
+        public async Task AuthenticateAsync_TooManyFailedLoginAttemptsButWaitingTimePassed_AuthenticatesUser()
         {
             // Arrange.
             _appSettings.Value.MaxLoginFailedCount = 5;
             const string password = "AbcAbc123";
             var user = _factory.CreateUsers(2, password)[0];
-            var dto = new AuthenticateRequestDto
+            var dto = new DTO.Authenticate.RequestDto
             {
                 Username = user.Username,
                 Password = password + "A"
@@ -375,7 +374,7 @@ namespace WebApi.Test.Tests.Services
             {
                 try
                 {
-                    await _service.Authenticate(dto);
+                    await _service.AuthenticateAsync(dto);
                 }
                 catch (IncorrectPasswordException)
                 {
@@ -388,7 +387,7 @@ namespace WebApi.Test.Tests.Services
             dto.Password = password;
 
             // Act.
-            var response = await _service.Authenticate(dto);
+            var response = await _service.AuthenticateAsync(dto);
 
             // Assert.
             Assert.Equal(dto.Username, response.Username);
@@ -396,7 +395,7 @@ namespace WebApi.Test.Tests.Services
 
         #endregion
 
-        #region GetAll
+        #region GetAllAsync
 
         /// <summary>
         /// Tests getting list of users.
@@ -404,7 +403,7 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task GetAll_WhenCalled_ReturnsListOfUsers()
+        public async Task GetAllAsync_WhenCalled_ReturnsListOfUsers()
         {
             // Arrange.
             var users = _factory.CreateUsers(10, "AbcAbc123");
@@ -413,7 +412,7 @@ namespace WebApi.Test.Tests.Services
             await _db.SaveChangesAsync();
 
             // Act.
-            var response = await _service.GetAll(_paginationFilter);
+            var response = await _service.GetAllAsync(_paginationFilter);
 
             // Assert.
             Assert.Equal(9, response.Data.Count);
@@ -430,13 +429,12 @@ namespace WebApi.Test.Tests.Services
                 Assert.Equal(expectedUsers[i].FirstName, actualUsers[i].FirstName);
                 Assert.Equal(expectedUsers[i].LastName, actualUsers[i].LastName);
                 Assert.Equal(expectedUsers[i].Email, actualUsers[i].Email);
-                Assert.Equal(expectedUsers[i].Role, actualUsers[i].Role);
             }
         }
 
         #endregion
 
-        #region GetById
+        #region GetDetailsAsync
 
         /// <summary>
         /// Tests getting user details.
@@ -444,13 +442,13 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task GetById_WhenCalled_ReturnsUserDetails()
+        public async Task GetDetailsAsync_WhenCalled_ReturnsUserDetails()
         {
             // Arrange.
             var user = _factory.CreateUsers(2, "AbcAbc123")[0];
 
             // Act.
-            var response = await _service.GetById(user.Id);
+            var response = await _service.GetDetailsAsync(user.Id);
 
             // Assert.
             Assert.Equal(user.Id, response.Id);
@@ -458,7 +456,6 @@ namespace WebApi.Test.Tests.Services
             Assert.Equal(user.FirstName, response.FirstName);
             Assert.Equal(user.LastName, response.LastName);
             Assert.Equal(user.Email, response.Email);
-            Assert.Equal(user.Role, response.Role);
             Assert.Equal(user.CreatedAt, response.CreatedAt);
             Assert.Equal(user.UpdatedAt, response.UpdatedAt);
             Assert.Equal(user.LastLoginAt, response.LastLoginAt);
@@ -471,13 +468,13 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task GetById_UserDoesNotExist_ThrowsEntityNotFoundException()
+        public async Task GetDetailsAsync_UserDoesNotExist_ThrowsEntityNotFoundException()
         {
             // Arrange.
             _factory.CreateUsers(2, "AbcAbc123");
 
             // Act.
-            Task Act() => _service.GetById(Guid.NewGuid());
+            Task Act() => _service.GetDetailsAsync(Guid.NewGuid());
 
             // Assert.
             await Assert.ThrowsAsync<EntityNotFoundException>(Act);
@@ -485,7 +482,7 @@ namespace WebApi.Test.Tests.Services
 
         #endregion
 
-        #region Update
+        #region UpdateAsync
 
         /// <summary>
         /// Tests updating user details.
@@ -493,12 +490,12 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task Update_WhenCalled_UpdatesUser()
+        public async Task UpdateAsync_WhenCalled_UpdatesUser()
         {
             // Arrange.
             var user = _factory.CreateUsers(2, "AbcAbc123")[0];
 
-            var dto = new UserUpdateRequestDto
+            var dto = new DTO.Update.RequestDto
             {
                 Username = new UpdateStringField {NewValue = Guid.NewGuid().ToString()},
                 FirstName = new UpdateStringField {NewValue = Guid.NewGuid().ToString()},
@@ -508,7 +505,7 @@ namespace WebApi.Test.Tests.Services
             };
 
             // Act.
-            await _service.Update(user.Id, user.Id, dto);
+            await _service.UpdateAsync(user.Id, user.Id, dto);
 
             // Assert.
             var actualUser = _db.Users.Single(x => x.Id == user.Id);
@@ -528,12 +525,12 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task Update_NoDataProvided_UserNotUpdated()
+        public async Task UpdateAsync_NoDataProvided_UserNotUpdated()
         {
             // Arrange.
             var user = _factory.CreateUsers(2, "AbcAbc123")[0];
 
-            var dto = new UserUpdateRequestDto
+            var dto = new DTO.Update.RequestDto
             {
                 Username = null,
                 FirstName = null,
@@ -543,7 +540,7 @@ namespace WebApi.Test.Tests.Services
             };
 
             // Act.
-            await _service.Update(user.Id, user.Id, dto);
+            await _service.UpdateAsync(user.Id, user.Id, dto);
 
             // Assert.
             var actualUser = _db.Users.Single(x => x.Id == user.Id);
@@ -563,14 +560,14 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task Update_DifferentUser_ThrowsForbiddenException()
+        public async Task UpdateAsync_DifferentUser_ThrowsForbiddenException()
         {
             // Arrange.
             var users = _factory.CreateUsers(2, "AbcAbc123");
-            var dto = new UserUpdateRequestDto();
+            var dto = new DTO.Update.RequestDto();
 
             // Act.
-            Task Act() => _service.Update(users[0].Id, users[1].Id, dto);
+            Task Act() => _service.UpdateAsync(users[0].Id, users[1].Id, dto);
 
             // Assert.
             await Assert.ThrowsAsync<ForbiddenException>(Act);
@@ -582,15 +579,15 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task Update_UserDoesNotExist_ThrowsEntityNotFoundException()
+        public async Task UpdateAsync_UserDoesNotExist_ThrowsEntityNotFoundException()
         {
             // Arrange.
             _factory.CreateUsers(2, "AbcAbc123");
             var userId = Guid.NewGuid();
-            var dto = new UserUpdateRequestDto();
+            var dto = new DTO.Update.RequestDto();
 
             // Act.
-            Task Act() => _service.Update(userId, userId, dto);
+            Task Act() => _service.UpdateAsync(userId, userId, dto);
 
             // Assert.
             await Assert.ThrowsAsync<EntityNotFoundException>(Act);
@@ -602,17 +599,17 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task Update_UsernameTaken_ThrowsUsernameTakenException()
+        public async Task UpdateAsync_UsernameTaken_ThrowsUsernameTakenException()
         {
             // Arrange.
             var users = _factory.CreateUsers(2, "AbcAbc123");
-            var dto = new UserUpdateRequestDto
+            var dto = new DTO.Update.RequestDto
             {
                 Username = new UpdateStringField {NewValue = users[1].Username}
             };
 
             // Act.
-            Task Act() => _service.Update(users[0].Id, users[0].Id, dto);
+            Task Act() => _service.UpdateAsync(users[0].Id, users[0].Id, dto);
 
             // Assert.
             await Assert.ThrowsAsync<UsernameTakenException>(Act);
@@ -625,23 +622,23 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task Update_TooManyFailedChangeEmailAttempts_ThrowsTooManyChangeEmailAttemptsException()
+        public async Task UpdateAsync_TooManyFailedChangeEmailAttempts_ThrowsTooManyChangeEmailAttemptsException()
         {
             // Arrange.
             _appSettings.Value.MaxUnconfirmedEmailCount = 5;
             var user = _factory.CreateUsers(2, "AbcAbc123")[0];
-            var dto = new UserUpdateRequestDto
+            var dto = new DTO.Update.RequestDto
             {
                 Email = new UpdateStringField {NewValue = Guid.NewGuid() + "@example.com"}
             };
 
             for (var i = 0; i < _appSettings.Value.MaxUnconfirmedEmailCount; i++)
             {
-                await _service.Update(user.Id, user.Id, dto);
+                await _service.UpdateAsync(user.Id, user.Id, dto);
             }
 
             // Act.
-            Task Act() => _service.Update(user.Id, user.Id, dto);
+            Task Act() => _service.UpdateAsync(user.Id, user.Id, dto);
 
             // Assert.
             await Assert.ThrowsAsync<TooManyChangeEmailAttemptsException>(Act);
@@ -653,19 +650,19 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task Update_TooManyFailedChangeEmailAttemptsButWaitingTimePassed_AllowsEmailUpdate()
+        public async Task UpdateAsync_TooManyFailedChangeEmailAttemptsButWaitingTimePassed_AllowsEmailUpdate()
         {
             // Arrange.
             _appSettings.Value.MaxUnconfirmedEmailCount = 5;
             var user = _factory.CreateUsers(2, "AbcAbc123")[0];
-            var dto = new UserUpdateRequestDto
+            var dto = new DTO.Update.RequestDto
             {
                 Email = new UpdateStringField {NewValue = Guid.NewGuid() + "@example.com"}
             };
 
             for (var i = 0; i < _appSettings.Value.MaxUnconfirmedEmailCount; i++)
             {
-                await _service.Update(user.Id, user.Id, dto);
+                await _service.UpdateAsync(user.Id, user.Id, dto);
             }
 
             user.UnconfirmedEmailCreatedAt =
@@ -673,7 +670,7 @@ namespace WebApi.Test.Tests.Services
             await _db.SaveChangesAsync();
 
             // Act.
-            await _service.Update(user.Id, user.Id, dto);
+            await _service.UpdateAsync(user.Id, user.Id, dto);
 
             // Assert.
             Assert.Equal(dto.Email.NewValue, user.UnconfirmedEmail);
@@ -685,17 +682,17 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task Update_SameEmail_ConfirmationEmailNotSent()
+        public async Task UpdateAsync_SameEmail_ConfirmationEmailNotSent()
         {
             // Arrange.
             var user = _factory.CreateUsers(2, "AbcAbc123")[0];
-            var dto = new UserUpdateRequestDto
+            var dto = new DTO.Update.RequestDto
             {
                 Email = new UpdateStringField {NewValue = user.Email}
             };
 
             // Act.
-            await _service.Update(user.Id, user.Id, dto);
+            await _service.UpdateAsync(user.Id, user.Id, dto);
 
             // Assert.
             Assert.Null(user.UnconfirmedEmail);
@@ -708,11 +705,11 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task Update_EmailNotSent_EmailNotSentException()
+        public async Task UpdateAsync_EmailNotSent_EmailNotSentException()
         {
             // Arrange.
             var users = _factory.CreateUsers(2, "AbcAbc123");
-            var dto = new UserUpdateRequestDto
+            var dto = new DTO.Update.RequestDto
             {
                 Email = new UpdateStringField {NewValue = Guid.NewGuid() + "@example.com"}
             };
@@ -726,7 +723,7 @@ namespace WebApi.Test.Tests.Services
                 _passwordHelper);
 
             // Act.
-            Task Act() => service.Update(users[0].Id, users[0].Id, dto);
+            Task Act() => service.UpdateAsync(users[0].Id, users[0].Id, dto);
 
             // Assert.
             await Assert.ThrowsAsync<EmailNotSentException>(Act);
@@ -734,7 +731,7 @@ namespace WebApi.Test.Tests.Services
 
         #endregion
 
-        #region Delete
+        #region DeleteAsync
 
         /// <summary>
         /// Tests deleting the user.
@@ -742,13 +739,13 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task Delete_WhenCalled_DeletesUser()
+        public async Task DeleteAsync_WhenCalled_DeletesUser()
         {
             // Arrange.
             var user = _factory.CreateUsers(2, "AbcAbc123")[0];
 
             // Act.
-            await _service.Delete(user.Id, user.Id);
+            await _service.DeleteAsync(user.Id, user.Id);
 
             // Assert.
             Assert.Null(_db.Users.FirstOrDefault(x => x.Id == user.Id));
@@ -760,13 +757,13 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task Delete_DifferentUser_ThrowsForbiddenException()
+        public async Task DeleteAsync_DifferentUser_ThrowsForbiddenException()
         {
             // Arrange.
             var users = _factory.CreateUsers(2, "AbcAbc123");
 
             // Act.
-            Task Act() => _service.Delete(users[0].Id, users[1].Id);
+            Task Act() => _service.DeleteAsync(users[0].Id, users[1].Id);
 
             // Assert.
             await Assert.ThrowsAsync<ForbiddenException>(Act);
@@ -774,7 +771,7 @@ namespace WebApi.Test.Tests.Services
 
         #endregion
 
-        #region ConfirmEmail
+        #region ConfirmEmailAsync
 
         /// <summary>
         /// Tests email confirmation.
@@ -782,7 +779,7 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task ConfirmEmail_WhenCalled_ChangesEmail()
+        public async Task ConfirmEmailAsync_WhenCalled_ChangesEmail()
         {
             // Arrange.
             var user = _factory.CreateUsers(2, "AbcAbc123")[0];
@@ -795,7 +792,7 @@ namespace WebApi.Test.Tests.Services
             await _db.SaveChangesAsync();
 
             // Act.
-            await _service.ConfirmEmail(user.UnconfirmedEmailCode);
+            await _service.ConfirmEmailAsync(user.UnconfirmedEmailCode);
 
             // Assert.
             Assert.Equal(0, user.UnconfirmedEmailCount);
@@ -811,7 +808,7 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task ConfirmEmail_FirstConfirmation_ActivatesUser()
+        public async Task ConfirmEmailAsync_FirstConfirmation_ActivatesUser()
         {
             // Arrange.
             var user = _factory.CreateUsers(2, "AbcAbc123")[0];
@@ -825,7 +822,7 @@ namespace WebApi.Test.Tests.Services
             await _db.SaveChangesAsync();
 
             // Act.
-            await _service.ConfirmEmail(user.UnconfirmedEmailCode);
+            await _service.ConfirmEmailAsync(user.UnconfirmedEmailCode);
 
             // Assert.
             Assert.True(user.IsActive);
@@ -837,7 +834,7 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task ConfirmEmail_InvalidCode_ThrowsEntityNotFoundException()
+        public async Task ConfirmEmailAsync_InvalidCode_ThrowsEntityNotFoundException()
         {
             // Arrange.
             var user = _factory.CreateUsers(2, "AbcAbc123")[0];
@@ -850,7 +847,7 @@ namespace WebApi.Test.Tests.Services
             await _db.SaveChangesAsync();
 
             // Act.
-            Task Act() => _service.ConfirmEmail(Guid.NewGuid().ToString());
+            Task Act() => _service.ConfirmEmailAsync(Guid.NewGuid().ToString());
 
             // Assert.
             await Assert.ThrowsAsync<EntityNotFoundException>(Act);
@@ -858,7 +855,7 @@ namespace WebApi.Test.Tests.Services
 
         #endregion
 
-        #region PasswordReset
+        #region PasswordResetAsync
 
         /// <summary>
         /// Tests password reset.
@@ -866,13 +863,13 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task PasswordReset_WhenCalled_SendsPasswordResetEmail()
+        public async Task PasswordResetAsync_WhenCalled_SendsPasswordResetEmail()
         {
             // Arrange.
             var user = _factory.CreateUsers(2, "AbcAbc123")[0];
             var emailService = Substitute.For<IEmailService>();
             var toEmail = "";
-            var dto = new PasswordResetRequestDto {Email = user.Email};
+            var dto = new DTO.PasswordReset.RequestDto {Email = user.Email};
             emailService
                 .SendAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
                     Arg.Any<string>(), Arg.Any<string>())
@@ -887,7 +884,7 @@ namespace WebApi.Test.Tests.Services
                 _passwordHelper);
 
             // Act.
-            await service.PasswordReset(dto);
+            await service.PasswordResetAsync(dto);
 
             // Assert.
             Assert.NotNull(user.ResetPasswordCode);
@@ -902,14 +899,14 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task PasswordReset_InvalidEmail_ThrowsEntityNotFoundException()
+        public async Task PasswordResetAsync_InvalidEmail_ThrowsEntityNotFoundException()
         {
             // Arrange.
             _factory.CreateUsers(2, "AbcAbc123");
-            var dto = new PasswordResetRequestDto {Email = Guid.NewGuid() + "@example.com"};
+            var dto = new DTO.PasswordReset.RequestDto {Email = Guid.NewGuid() + "@example.com"};
 
             // Act.
-            Task Act() => _service.PasswordReset(dto);
+            Task Act() => _service.PasswordResetAsync(dto);
 
             // Assert.
             await Assert.ThrowsAsync<EntityNotFoundException>(Act);
@@ -922,18 +919,18 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task PasswordReset_TooManyAttempts_ThrowsTooManyResetPasswordAttemptsException()
+        public async Task PasswordResetAsync_TooManyAttempts_ThrowsTooManyResetPasswordAttemptsException()
         {
             // Arrange.
             _appSettings.Value.MaxResetPasswordCount = 5;
             var user = _factory.CreateUsers(2, "AbcAbc123")[0];
-            var dto = new PasswordResetRequestDto {Email = user.Email};
+            var dto = new DTO.PasswordReset.RequestDto {Email = user.Email};
 
             for (var i = 0; i < _appSettings.Value.MaxResetPasswordCount; i++)
-                await _service.PasswordReset(dto);
+                await _service.PasswordResetAsync(dto);
 
             // Act.
-            Task Act() => _service.PasswordReset(dto);
+            Task Act() => _service.PasswordResetAsync(dto);
 
             // Assert.
             await Assert.ThrowsAsync<TooManyResetPasswordAttemptsException>(Act);
@@ -945,37 +942,37 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task PasswordReset_TooManyAttemptsButWaitingTimePassed_SendsPasswordResetEmail()
+        public async Task PasswordResetAsync_TooManyAttemptsButWaitingTimePassed_SendsPasswordResetEmail()
         {
             // Arrange.
             _appSettings.Value.MaxResetPasswordCount = 5;
             var user = _factory.CreateUsers(2, "AbcAbc123")[0];
-            var dto = new PasswordResetRequestDto {Email = user.Email};
+            var dto = new DTO.PasswordReset.RequestDto {Email = user.Email};
 
             for (var i = 0; i < _appSettings.Value.MaxResetPasswordCount; i++)
-                await _service.PasswordReset(dto);
+                await _service.PasswordResetAsync(dto);
 
             user.ResetPasswordCreatedAt = DateTime.UtcNow.AddSeconds(-_appSettings.Value.ResetPasswordWaitingTime - 1);
             await _db.SaveChangesAsync();
 
             // Act.
-            await _service.PasswordReset(dto);
+            await _service.PasswordResetAsync(dto);
 
             // Assert.
             Assert.NotNull(user.ResetPasswordCode);
         }
-        
+
         /// <summary>
         /// Tests password reset when email sending fails.
         /// It should throw <exception cref="EmailNotSentException">EmailNotSentException</exception>.
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task PasswordReset_EmailNotSent_EmailNotSentException()
+        public async Task PasswordResetAsync_EmailNotSent_EmailNotSentException()
         {
             // Arrange.
             var user = _factory.CreateUsers(2, "AbcAbc123")[0];
-            var dto = new PasswordResetRequestDto {Email = user.Email};
+            var dto = new DTO.PasswordReset.RequestDto {Email = user.Email};
             var emailService = Substitute.For<IEmailService>();
             emailService
                 .SendAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
@@ -985,7 +982,7 @@ namespace WebApi.Test.Tests.Services
                 _passwordHelper);
 
             // Act.
-            Task Act() => service.PasswordReset(dto);
+            Task Act() => service.PasswordResetAsync(dto);
 
             // Assert.
             await Assert.ThrowsAsync<EmailNotSentException>(Act);
@@ -993,7 +990,7 @@ namespace WebApi.Test.Tests.Services
 
         #endregion
 
-        #region ConfirmResetPassword
+        #region ConfirmResetPasswordAsync
 
         /// <summary>
         /// Tests password reset confirmation.
@@ -1001,7 +998,7 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task ConfirmResetPassword_WhenCalled_ResetsPassword()
+        public async Task ConfirmResetPasswordAsync_WhenCalled_ResetsPassword()
         {
             // Arrange.
             var user = _factory.CreateUsers(2, "AbcAbc123")[0];
@@ -1012,7 +1009,7 @@ namespace WebApi.Test.Tests.Services
             await _db.SaveChangesAsync();
 
             // Act.
-            var response = await _service.ConfirmResetPassword(user.ResetPasswordCode, user.Email);
+            var response = await _service.ConfirmResetPasswordAsync(user.ResetPasswordCode, user.Email);
 
             // Assert.
             Assert.Null(user.ResetPasswordCode);
@@ -1027,7 +1024,7 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task ConfirmResetPassword_InvalidEmail_ThrowsEntityNotFoundException()
+        public async Task ConfirmResetPasswordAsync_InvalidEmail_ThrowsEntityNotFoundException()
         {
             // Arrange.
             var user = _factory.CreateUsers(2, "AbcAbc123")[0];
@@ -1037,7 +1034,7 @@ namespace WebApi.Test.Tests.Services
             await _db.SaveChangesAsync();
 
             // Act.
-            Task Act() => _service.ConfirmResetPassword(user.ResetPasswordCode, Guid.NewGuid() + "@example.com");
+            Task Act() => _service.ConfirmResetPasswordAsync(user.ResetPasswordCode, Guid.NewGuid() + "@example.com");
 
             // Assert.
             await Assert.ThrowsAsync<EntityNotFoundException>(Act);
@@ -1049,7 +1046,7 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task ConfirmResetPassword_InvalidCode_ThrowsEntityNotFoundException()
+        public async Task ConfirmResetPasswordAsync_InvalidCode_ThrowsEntityNotFoundException()
         {
             // Arrange.
             var user = _factory.CreateUsers(2, "AbcAbc123")[0];
@@ -1059,7 +1056,7 @@ namespace WebApi.Test.Tests.Services
             await _db.SaveChangesAsync();
 
             // Act.
-            Task Act() => _service.ConfirmResetPassword(Guid.NewGuid().ToString(), user.Email);
+            Task Act() => _service.ConfirmResetPasswordAsync(Guid.NewGuid().ToString(), user.Email);
 
             // Assert.
             await Assert.ThrowsAsync<EntityNotFoundException>(Act);
@@ -1071,7 +1068,7 @@ namespace WebApi.Test.Tests.Services
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
-        public async Task ConfirmResetPassword_CodeExpired_ThrowsAppException()
+        public async Task ConfirmResetPasswordAsync_CodeExpired_ThrowsAppException()
         {
             // Arrange.
             _appSettings.Value.ResetPasswordValidTime = 10;
@@ -1082,7 +1079,7 @@ namespace WebApi.Test.Tests.Services
             await _db.SaveChangesAsync();
 
             // Act.
-            Task Act() => _service.ConfirmResetPassword(user.ResetPasswordCode, user.Email);
+            Task Act() => _service.ConfirmResetPasswordAsync(user.ResetPasswordCode, user.Email);
 
             // Assert.
             await Assert.ThrowsAsync<AppException>(Act);

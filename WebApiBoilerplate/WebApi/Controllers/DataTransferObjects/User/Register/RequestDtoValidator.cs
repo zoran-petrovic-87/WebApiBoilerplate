@@ -2,18 +2,18 @@ using FluentValidation;
 using Microsoft.Extensions.Localization;
 using WebApi.Resources.Localization;
 
-namespace WebApi.DataTransferObjects.User
+namespace WebApi.Controllers.DataTransferObjects.User.Register
 {
     /// <summary>
-    /// Validator for the <seealso cref="UserCreateRequestDto" />.
+    /// Validator for the <seealso cref="RequestDto" />.
     /// </summary>
-    public class UserCreateRequestDtoValidator : AbstractValidator<UserCreateRequestDto>
+    public class RequestDtoValidator : AbstractValidator<RequestDto>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="UserCreateRequestDtoValidator"/> class.
+        /// Initializes a new instance of the <see cref="RequestDtoValidator"/> class.
         /// </summary>
         /// <param name="l">The localizer.</param>
-        public UserCreateRequestDtoValidator(IStringLocalizer<Translation> l)
+        public RequestDtoValidator(IStringLocalizer<Translation> l)
         {
             RuleFor(x => x.Username).Username(l);
             RuleFor(x => x.FirstName).FirstName(l);

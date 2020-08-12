@@ -1,9 +1,9 @@
-namespace WebApi.DataTransferObjects.User
+namespace WebApi.Controllers.DataTransferObjects.User.Authenticate
 {
     /// <summary>
     /// Data transfer object for the authenticate request.
     /// </summary>
-    public class AuthenticateRequestDto
+    public class RequestDto
     {
         /// <summary>
         /// Gets or sets the username.
