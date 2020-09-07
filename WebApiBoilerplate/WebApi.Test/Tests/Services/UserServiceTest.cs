@@ -74,11 +74,133 @@ namespace WebApi.Test.Tests.Services
             _db.Dispose();
         }
 
-        #region RegisterAsync
+        #region CreateAsync
 
         /// <summary>
         /// Tests creating a user.
         /// It should create a user.
+        /// </summary>
+        /// <returns>The task.</returns>
+        [Fact]
+        public async Task CreateAsync_WhenCalled_CreatesUser()
+        {
+            // Arrange.
+            var userId = _factory.CreateUsers(1, "TestPass123!")[0].Id;
+            var dto = new DTO.RegisterAsync.RequestDto
+            {
+                Username = "test_username",
+                FirstName = "My First Name",
+                LastName = "My Last Name",
+                Email = "myemail@example.com",
+                Password = "MyPassword123"
+            };
+
+            // Act.
+            var response = await _service.CreateAsync(userId, dto);
+
+            // Assert.
+            Assert.Equal(dto.Username, response.Username);
+            Assert.Equal(dto.FirstName, response.FirstName);
+            Assert.Equal(dto.LastName, response.LastName);
+
+            var user = _db.Users.Single(x => x.Username == dto.Username);
+            Assert.Equal(dto.Username, user.Username);
+            Assert.Equal(dto.FirstName, user.FirstName);
+            Assert.Equal(dto.LastName, user.LastName);
+            Assert.Equal(dto.Email, user.Email);
+            Assert.True(_passwordHelper.VerifyHash(dto.Password, user.PasswordHash, user.PasswordSalt));
+            Assert.True(user.IsActive);
+            Assert.Equal(userId, user.CreatedById);
+        }
+
+        /// <summary>
+        /// Tests creating a user when password is <c>null</c> or white space.
+        /// It should throw <exception cref="InvalidPasswordException">InvalidPasswordException</exception>.
+        /// </summary>
+        /// <param name="password">The password.</param>
+        /// <returns>The task.</returns>
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("   ")]
+        public async Task CreateAsync_PasswordIsNullOrWhiteSpace_ThrowsInvalidPasswordException(string password)
+        {
+            // Arrange.
+            var dto = new DTO.RegisterAsync.RequestDto
+            {
+                Username = "test_username",
+                FirstName = "My First Name",
+                LastName = "My Last Name",
+                Email = "myemail@example.com",
+                Password = password
+            };
+
+            // Act.
+            Task Act() => _service.CreateAsync(Guid.NewGuid(), dto);
+
+            // Assert.
+            await Assert.ThrowsAsync<InvalidPasswordException>(Act);
+        }
+
+        /// <summary>
+        /// Tests creating a user when username is taken.
+        /// It should throw <exception cref="UsernameTakenException">UsernameTakenException</exception>.
+        /// </summary>
+        /// <returns>The task.</returns>
+        [Fact]
+        public async Task CreateAsync_UsernameIsTaken_ThrowsUsernameTakenException()
+        {
+            // Arrange.
+            var user = _factory.CreateUsers(1, "AbcAbc123")[0];
+            var dto = new DTO.RegisterAsync.RequestDto
+            {
+                Username = user.Username,
+                FirstName = "My First Name",
+                LastName = "My Last Name",
+                Email = "myemail@example.com",
+                Password = "MyPassword123"
+            };
+
+            // Act.
+            Task Act() => _service.CreateAsync(Guid.NewGuid(), dto);
+
+            // Assert.
+            await Assert.ThrowsAsync<UsernameTakenException>(Act);
+        }
+
+        /// <summary>
+        /// Tests creating a user when email is taken.
+        /// It should throw <exception cref="EmailTakenException">EmailTakenException</exception>.
+        /// </summary>
+        /// <returns>The task.</returns>
+        [Fact]
+        public async Task CreateAsync_EmailIsTaken_ThrowsEmailTakenException()
+        {
+            // Arrange.
+            var user = _factory.CreateUsers(1, "AbcAbc123")[0];
+            var dto = new DTO.RegisterAsync.RequestDto
+            {
+                Username = "test_username",
+                FirstName = "My First Name",
+                LastName = "My Last Name",
+                Email = user.Email,
+                Password = "MyPassword123"
+            };
+
+            // Act.
+            Task Act() => _service.CreateAsync(Guid.NewGuid(), dto);
+
+            // Assert.
+            await Assert.ThrowsAsync<EmailTakenException>(Act);
+        }
+
+        #endregion
+
+        #region RegisterAsync
+
+        /// <summary>
+        /// Tests user registration.
+        /// It should register a user.
         /// </summary>
         /// <returns>The task.</returns>
         [Fact]
@@ -113,7 +235,7 @@ namespace WebApi.Test.Tests.Services
         }
 
         /// <summary>
-        /// Tests creating a user when password is <c>null</c> or white space.
+        /// Tests user registration when password is <c>null</c> or white space.
         /// It should throw <exception cref="InvalidPasswordException">InvalidPasswordException</exception>.
         /// </summary>
         /// <param name="password">The password.</param>
@@ -142,7 +264,7 @@ namespace WebApi.Test.Tests.Services
         }
 
         /// <summary>
-        /// Tests creating a user when username is taken.
+        /// Tests user registration when username is taken.
         /// It should throw <exception cref="UsernameTakenException">UsernameTakenException</exception>.
         /// </summary>
         /// <returns>The task.</returns>
@@ -168,7 +290,7 @@ namespace WebApi.Test.Tests.Services
         }
 
         /// <summary>
-        /// Tests creating a user when email is taken.
+        /// Tests user registration when email is taken.
         /// It should throw <exception cref="EmailTakenException">EmailTakenException</exception>.
         /// </summary>
         /// <returns>The task.</returns>
@@ -194,7 +316,7 @@ namespace WebApi.Test.Tests.Services
         }
 
         /// <summary>
-        /// Tests creating a user when sending of activation email fails.
+        /// Tests user registration when sending of activation email fails.
         /// It should throw <exception cref="EmailNotSentException">EmailNotSentException</exception>.
         /// </summary>
         /// <returns>The task.</returns>
