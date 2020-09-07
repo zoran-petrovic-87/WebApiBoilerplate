@@ -1,7 +1,7 @@
 namespace WebApi.Controllers.DataTransferObjects.User.AuthenticateAsync
 {
     /// <summary>
-    /// Data transfer object for the authenticate request.
+    /// Data transfer object for the "Authenticate" request.
     /// </summary>
     public class RequestDto
     {

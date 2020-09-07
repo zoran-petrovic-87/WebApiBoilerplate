@@ -5,7 +5,7 @@ using System;
 namespace WebApi.Controllers.DataTransferObjects.User.GetDetailsAsync
 {
     /// <summary>
-    /// Data transfer object for the user details response.
+    /// Data transfer object for the "GetDetails" response.
     /// </summary>
     public class ResponseDto
     {
@@ -50,10 +50,10 @@ namespace WebApi.Controllers.DataTransferObjects.User.GetDetailsAsync
         public string Email { get; set; }
 
         /// <summary>
-        /// Gets or sets the role.
+        /// Gets or sets the role data transfer object.
         /// </summary>
         /// <value>
-        /// The role.
+        /// The role data transfer object.
         /// </value>
         public Role.GetAllAsync.ResponseDto Role { get; set; }
 

@@ -5,7 +5,7 @@ using WebApi.Resources.Localization;
 namespace WebApi.Controllers.DataTransferObjects.User.UpdateAsync
 {
     /// <summary>
-    ///  Validator for the <seealso cref="RequestDto" />.
+    /// Validator for the <seealso cref="RequestDto" />.
     /// </summary>
     public class UserUpdateRequestDtoValidator : AbstractValidator<RequestDto>
     {

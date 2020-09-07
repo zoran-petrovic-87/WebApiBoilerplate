@@ -1,9 +1,7 @@
-using System;
-
 namespace WebApi.Controllers.DataTransferObjects.User.RegisterAsync
 {
     /// <summary>
-    /// Data transfer object for the register user request.
+    /// Data transfer object for the "Register" user request.
     /// </summary>
     public class RequestDto
     {

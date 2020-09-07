@@ -1,7 +1,7 @@
 namespace WebApi.Controllers.DataTransferObjects.User.PasswordResetAsync
 {
     /// <summary>
-    /// Data transfer object for the password reset request.
+    /// Data transfer object for the "PasswordReset" request.
     /// </summary>
     public class RequestDto
     {

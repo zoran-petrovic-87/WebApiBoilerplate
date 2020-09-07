@@ -3,7 +3,7 @@ using System;
 namespace WebApi.Controllers.DataTransferObjects.Role.GetDetailsAsync
 {
     /// <summary>
-    /// Data transfer object for the role details response.
+    /// Data transfer object for the role "GetDetails" response.
     /// </summary>
     public class ResponseDto
     {
@@ -24,12 +24,12 @@ namespace WebApi.Controllers.DataTransferObjects.Role.GetDetailsAsync
         public DateTime CreatedAt { get; set; }
 
         /// <summary>
-        /// Gets or sets the the user that created this role.
+        /// Gets or sets the identifier of the user that created this role.
         /// </summary>
         /// <value>
-        /// The the user that created this role.
+        /// The identifier of the user that created this role.
         /// </value>
-        public virtual User.GetDetailsAsync.ResponseDto CreatedBy { get; set; }
+        public Guid CreatedById { get; set; }
 
         /// <summary>
         /// Gets or sets the date when the role was updated.
@@ -40,12 +40,12 @@ namespace WebApi.Controllers.DataTransferObjects.Role.GetDetailsAsync
         public DateTime? UpdatedAt { get; set; }
 
         /// <summary>
-        /// Gets or sets the the user that updated this role.
+        /// Gets or sets the identifier of the user that updated this role.
         /// </summary>
         /// <value>
-        /// The the user that updated this role.
+        /// The identifier of the user that updated this role.
         /// </value>
-        public virtual User.GetDetailsAsync.ResponseDto UpdatedBy { get; set; }
+        public Guid UpdatedById { get; set; }
 
         /// <summary>
         /// Gets or sets the name.

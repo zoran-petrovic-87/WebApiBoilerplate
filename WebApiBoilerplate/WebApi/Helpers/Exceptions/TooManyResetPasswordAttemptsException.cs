@@ -4,7 +4,7 @@ using System.Globalization;
 namespace WebApi.Helpers.Exceptions
 {
     /// <summary>
-    /// Exception that should be thrown when there were too many failed reset password attempts.
+    /// Exception that should be thrown when there were too many failed attempts to reset password.
     /// </summary>
     /// <seealso cref="WebApi.Helpers.Exceptions.AppException" />
     public class TooManyResetPasswordAttemptsException : AppException

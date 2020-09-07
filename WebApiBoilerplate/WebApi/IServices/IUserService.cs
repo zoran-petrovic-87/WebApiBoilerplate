@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using WebApi.Helpers.Pagination;
-using DTO = WebApi.Controllers.DataTransferObjects.User;
+using Dto = WebApi.Controllers.DataTransferObjects.User;
 
 namespace WebApi.IServices
 {
@@ -13,47 +13,55 @@ namespace WebApi.IServices
         /// <summary>
         /// Authenticates the specified user.
         /// </summary>
-        /// <param name="dto">The <see cref="WebApi.Controllers.DataTransferObjects.User.AuthenticateAsync.RequestDto"/> data transfer object.</param>
+        /// <param name="dto">The <see cref="Dto.AuthenticateAsync.RequestDto"/> data transfer object.</param>
         /// <returns>The user.</returns>
-        Task<DTO.AuthenticateAsync.ResponseDto> AuthenticateAsync(DTO.AuthenticateAsync.RequestDto dto);
+        Task<Dto.AuthenticateAsync.ResponseDto> AuthenticateAsync(Dto.AuthenticateAsync.RequestDto dto);
+
+        /// <summary>
+        /// Registers the new user.
+        /// </summary>
+        /// <param name="dto">The <see cref="Dto.RegisterAsync.RequestDto"/> data transfer object.</param>
+        /// <returns>The user details.</returns>
+        Task<Dto.GetDetailsAsync.ResponseDto> RegisterAsync(Dto.RegisterAsync.RequestDto dto);
 
         /// <summary>
         /// Creates the new user.
         /// </summary>
-        /// <param name="dto">The <see cref="WebApi.Controllers.DataTransferObjects.User.RegisterAsync.RequestDto"/> data transfer object.</param>
+        /// <param name="userId">The identifier of the user that made the request.</param>
+        /// <param name="dto">The <see cref="Dto.RegisterAsync.RequestDto"/> data transfer object.</param>
         /// <returns>The user details.</returns>
-        Task<DTO.GetDetailsAsync.ResponseDto> RegisterAsync(DTO.RegisterAsync.RequestDto dto);
+        Task<Dto.GetDetailsAsync.ResponseDto> CreateAsync(Guid userId, Dto.RegisterAsync.RequestDto dto);
 
         /// <summary>
         /// Gets all users.
         /// </summary>
         /// <param name="paginationFilter">The pagination filter.</param>
         /// <returns>The list of users.</returns>
-        Task<PagedResult<DTO.GetAll.ResponseDto>> GetAllAsync(PaginationFilter paginationFilter);
+        Task<PagedResult<Dto.GetAll.ResponseDto>> GetAllAsync(PaginationFilter paginationFilter);
 
         /// <summary>
         /// Gets the user by identifier.
         /// </summary>
         /// <param name="id">The user identifier.</param>
         /// <returns>The user details.</returns>
-        Task<DTO.GetDetailsAsync.ResponseDto> GetDetailsAsync(Guid id);
+        Task<Dto.GetDetailsAsync.ResponseDto> GetDetailsAsync(Guid id);
 
         /// <summary>
         /// Updates the specified user.
         /// </summary>
-        /// <param name="requestedByUserId">The identifier of the user that made update request.</param>
-        /// <param name="userId">The identifier of the user that should be updated.</param>
-        /// <param name="dto">The <see cref="WebApi.Controllers.DataTransferObjects.User.UpdateAsync.RequestDto"/> data transfer object.</param>
+        /// <param name="id">The identifier of the user that should be updated.</param>
+        /// <param name="userId">The identifier of the user that made update request.</param>
+        /// <param name="dto">The <see cref="Dto.UpdateAsync.RequestDto"/> data transfer object.</param>
         /// <returns>The user details.</returns>
-        Task<DTO.GetDetailsAsync.ResponseDto> UpdateAsync(Guid requestedByUserId, Guid userId, DTO.UpdateAsync.RequestDto dto);
+        Task<Dto.GetDetailsAsync.ResponseDto> UpdateAsync(Guid id, Guid userId, Dto.UpdateAsync.RequestDto dto);
 
         /// <summary>
         /// Deletes the specified user.
         /// </summary>
-        /// <param name="requestedByUserId">The identifier of the user that made the delete request.</param>
         /// <param name="id">The identifier of the user that should be deleted.</param>
+        /// <param name="userId">The identifier of the user that made the delete request.</param>
         /// <returns>Task.</returns>
-        Task DeleteAsync(Guid requestedByUserId, Guid id);
+        Task DeleteAsync(Guid id, Guid userId);
 
         /// <summary>
         /// Confirms the email.
@@ -63,11 +71,11 @@ namespace WebApi.IServices
         Task ConfirmEmailAsync(string code);
 
         /// <summary>
-        /// Resets te password by sending an email to the user.
+        /// Resets the password by sending an email to the user.
         /// </summary>
-        /// <param name="dto">The <see cref="WebApi.Controllers.DataTransferObjects.User.PasswordResetAsync.RequestDto"/> data transfer object.</param>
+        /// <param name="dto">The <see cref="Dto.PasswordResetAsync.RequestDto"/> data transfer object.</param>
         /// <returns>Task.</returns>
-        Task PasswordResetAsync(DTO.PasswordResetAsync.RequestDto dto);
+        Task PasswordResetAsync(Dto.PasswordResetAsync.RequestDto dto);
 
         /// <summary>
         /// Confirms the reset password.
@@ -75,6 +83,6 @@ namespace WebApi.IServices
         /// <param name="code">The code that will be used to validate reset password request.</param>
         /// <param name="email">The email address of the user.</param>
         /// <returns>Task</returns>
-        Task<DTO.ConfirmResetPasswordAsync.ResponseDto> ConfirmResetPasswordAsync(string code, string email);
+        Task<Dto.ConfirmResetPasswordAsync.ResponseDto> ConfirmResetPasswordAsync(string code, string email);
     }
 }

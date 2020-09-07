@@ -33,10 +33,10 @@ namespace WebApi.Models
         public Guid CreatedById { get; set; }
 
         /// <summary>
-        /// Gets or sets the the user that created this role.
+        /// Gets or sets the user that created this role.
         /// </summary>
         /// <value>
-        /// The the user that created this role.
+        /// The user that created this role.
         /// </value>
         public virtual User CreatedBy { get; set; }
 
@@ -57,10 +57,10 @@ namespace WebApi.Models
         public Guid? UpdatedById { get; set; }
 
         /// <summary>
-        /// Gets or sets the the user that updated this role.
+        /// Gets or sets the user that updated this role.
         /// </summary>
         /// <value>
-        /// The the user that updated this role.
+        /// The user that updated this role.
         /// </value>
         public virtual User UpdatedBy { get; set; }
 

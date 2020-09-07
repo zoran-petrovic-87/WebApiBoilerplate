@@ -32,6 +32,12 @@ namespace WebApi.Test.Helpers
             Context.SaveChanges();
         }
 
+        /// <summary>
+        /// Creates list of users.
+        /// </summary>
+        /// <param name="count">The number of users to create.</param>
+        /// <param name="password">The password that will be set for every user.</param>
+        /// <returns>The list of users.</returns>
         public List<User> CreateUsers(int count, string password)
         {
             var users = new List<User>();

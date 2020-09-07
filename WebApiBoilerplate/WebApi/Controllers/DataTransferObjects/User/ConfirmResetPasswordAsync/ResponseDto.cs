@@ -3,7 +3,7 @@ using System;
 namespace WebApi.Controllers.DataTransferObjects.User.ConfirmResetPasswordAsync
 {
     /// <summary>
-    /// Data transfer object for the user reset password response.
+    /// Data transfer object for the "ConfirmResetPassword" response.
     /// </summary>
     public class ResponseDto
     {

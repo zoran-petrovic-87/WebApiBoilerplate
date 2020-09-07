@@ -127,7 +127,7 @@ namespace WebApi.Helpers
         /// Gets or sets the administrator username.
         /// </summary>
         /// <value>
-        /// The adminisrator username.
+        /// The administrator username.
         /// </value>
         public string AdminUsername { get; set; }
 

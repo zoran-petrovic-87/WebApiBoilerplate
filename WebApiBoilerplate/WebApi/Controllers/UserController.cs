@@ -1,6 +1,5 @@
 using System;
 using System.Net;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNetCore.Authorization;
@@ -10,11 +9,14 @@ using WebApi.Helpers.Exceptions;
 using WebApi.Helpers.Pagination;
 using WebApi.IServices;
 using Dto = WebApi.Controllers.DataTransferObjects.User;
+using DtoAuth = WebApi.Controllers.DataTransferObjects.User.AuthenticateAsync;
 
 namespace WebApi.Controllers
 {
     /// <summary>
-    /// The controller for handling user related request.
+    /// The controller for handling user related requests.
+    /// <c>CreatedAtAction</c> will not work if you use "Async" suffix in controller action name.
+    /// You must specify <c>ActionName</c> attribute to fix this known issue.
     /// </summary>
     /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
     [Authorize]
@@ -23,26 +25,29 @@ namespace WebApi.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IAuthHelper _authHelper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserController"/> class.
         /// </summary>
         /// <param name="userService">The user service.</param>
-        public UserController(IUserService userService)
+        /// <param name="authHelper">The authentication helper.</param>
+        public UserController(IUserService userService, IAuthHelper authHelper)
         {
             _userService = userService;
+            _authHelper = authHelper;
         }
 
         /// <summary>
-        /// Authenticates the specified user.
+        /// Authenticates the user.
         /// </summary>
         /// <param name="dto">The request data.</param>
         /// <returns>The result containing user info and authorization token, if authentication was successful.
         /// </returns>
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        public async Task<ActionResult<Dto.AuthenticateAsync.ResponseDto>> AuthenticateAsync(
-            [FromBody] Dto.AuthenticateAsync.RequestDto dto)
+        [ActionName(nameof(AuthenticateAsync))]
+        public async Task<ActionResult<DtoAuth.ResponseDto>> AuthenticateAsync([FromBody] DtoAuth.RequestDto dto)
         {
             try
             {
@@ -55,12 +60,13 @@ namespace WebApi.Controllers
         }
 
         /// <summary>
-        /// Register new user.
+        /// Registers new user.
         /// </summary>
         /// <param name="dto">The request data.</param>
         /// <returns>The HTTP response indicating if this request was successful or not.</returns>
         [AllowAnonymous]
         [HttpPost("register")]
+        [ActionName(nameof(RegisterAsync))]
         public async Task<ActionResult> RegisterAsync([FromBody] Dto.RegisterAsync.RequestDto dto)
         {
             try
@@ -79,11 +85,37 @@ namespace WebApi.Controllers
         }
 
         /// <summary>
+        /// Creates new user. Only users with admin role can access this endpoint.
+        /// </summary>
+        /// <param name="dto">The request data.</param>
+        /// <returns>The HTTP response indicating if this request was successful or not.</returns>
+        [Authorize(Policy = "RequireAdminRole")]
+        [HttpPost]
+        [ActionName(nameof(CreateAsync))]
+        public async Task<ActionResult> CreateAsync([FromBody] Dto.RegisterAsync.RequestDto dto)
+        {
+            try
+            {
+                var user = await _userService.CreateAsync(_authHelper.GetUserId(this), dto);
+                return CreatedAtAction(nameof(GetDetailsAsync), new {id = user.Id}, user);
+            }
+            catch (EmailNotSentException ex)
+            {
+                return StatusCode((int) HttpStatusCode.BadGateway, new ResponseMessage {Message = ex.Message});
+            }
+            catch (AppException ex)
+            {
+                return BadRequest(new ResponseMessage {Message = ex.Message});
+            }
+        }
+
+        /// <summary>
         /// Gets all users.
         /// </summary>
         /// <param name="paginationFilter">The pagination filter.</param>
         /// <returns>The paginated HTTP response with list of users.</returns>
         [HttpGet]
+        [ActionName(nameof(GetAllAsync))]
         public async Task<ActionResult<PagedResult<Dto.GetAll.ResponseDto>>> GetAllAsync(
             [FromQuery] PaginationFilter paginationFilter)
         {
@@ -96,6 +128,7 @@ namespace WebApi.Controllers
         /// <param name="id">The identifier.</param>
         /// <returns>The user details.</returns>
         [HttpGet("{id}")]
+        [ActionName(nameof(GetDetailsAsync))]
         public async Task<ActionResult<Dto.GetDetailsAsync.ResponseDto>> GetDetailsAsync(Guid id)
         {
             try
@@ -119,14 +152,12 @@ namespace WebApi.Controllers
         /// <param name="dto">The request data.</param>
         /// <returns>HTTP response indicating if this request was successful or not.</returns>
         [HttpPatch("{id}")]
+        [ActionName(nameof(UpdateAsync))]
         public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] Dto.UpdateAsync.RequestDto dto)
         {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var requestedByUserId = Guid.Parse(identity.FindFirst(ClaimTypes.Name).Value);
-
             try
             {
-                var user = await _userService.UpdateAsync(requestedByUserId, id, dto);
+                var user = await _userService.UpdateAsync(id, _authHelper.GetUserId(this), dto);
                 return CreatedAtAction(nameof(GetDetailsAsync), new {id = user.Id}, user);
             }
             catch (ForbiddenException ex)
@@ -149,13 +180,12 @@ namespace WebApi.Controllers
         /// <param name="id">The user identifier.</param>
         /// <returns>HTTP response indicating if this request was successful or not.</returns>
         [HttpDelete("{id}")]
+        [ActionName(nameof(DeleteAsync))]
         public async Task<ActionResult> DeleteAsync(Guid id)
         {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var requestedByUserId = Guid.Parse(identity.FindFirst(ClaimTypes.Name).Value);
             try
             {
-                await _userService.DeleteAsync(requestedByUserId, id);
+                await _userService.DeleteAsync(id, _authHelper.GetUserId(this));
                 return NoContent();
             }
             catch (ForbiddenException ex)
@@ -171,6 +201,7 @@ namespace WebApi.Controllers
         /// <returns>HTTP response indicating if this request was successful or not.</returns>
         [AllowAnonymous]
         [HttpGet("ConfirmEmail")]
+        [ActionName(nameof(ConfirmEmailAsync))]
         public async Task<ActionResult> ConfirmEmailAsync([FromQuery] string code)
         {
             try
@@ -191,6 +222,7 @@ namespace WebApi.Controllers
         /// <returns>HTTP response indicating if this request was successful or not.</returns>
         [AllowAnonymous]
         [HttpPost("PasswordReset")]
+        [ActionName(nameof(PasswordResetAsync))]
         public async Task<ActionResult> PasswordResetAsync([FromBody] Dto.PasswordResetAsync.RequestDto dto)
         {
             try
@@ -216,6 +248,7 @@ namespace WebApi.Controllers
         /// <returns>HTTP response indicating if this request was successful or not.</returns>
         [AllowAnonymous]
         [HttpGet("ConfirmPasswordReset")]
+        [ActionName(nameof(ConfirmPasswordResetAsync))]
         public async Task<ActionResult> ConfirmPasswordResetAsync([FromQuery] string code, [FromQuery] string email)
         {
             try

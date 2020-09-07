@@ -4,7 +4,7 @@ using System.Globalization;
 namespace WebApi.Helpers.Exceptions
 {
     /// <summary>
-    /// Exception that should be thrown when there were too many failed change email address attempts.
+    /// Exception that should be thrown when there were too many failed attempts to change email address.
     /// </summary>
     /// <seealso cref="WebApi.Helpers.Exceptions.AppException" />
     public class TooManyChangeEmailAttemptsException : AppException

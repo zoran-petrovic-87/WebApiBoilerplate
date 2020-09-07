@@ -1,7 +1,7 @@
 namespace WebApi.Controllers.DataTransferObjects.User.UpdateAsync
 {
     /// <summary>
-    /// Data transfer object for the user update request.
+    /// Data transfer object for the user "Update" request.
     /// </summary>
     public class RequestDto
     {

@@ -3,7 +3,7 @@ using System;
 namespace WebApi.Controllers.DataTransferObjects.User.AuthenticateAsync
 {
     /// <summary>
-    /// Data transfer object for the authenticate response.
+    /// Data transfer object for the "Authenticate" response.
     /// </summary>
     public class ResponseDto
     {

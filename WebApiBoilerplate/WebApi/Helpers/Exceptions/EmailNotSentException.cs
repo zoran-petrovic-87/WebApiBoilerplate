@@ -4,7 +4,7 @@ using System.Globalization;
 namespace WebApi.Helpers.Exceptions
 {
     /// <summary>
-    /// Exception that should be thrown when the email is not sent.
+    /// Exception that should be thrown when the email is not sent successfully.
     /// </summary>
     /// <seealso cref="WebApi.Helpers.Exceptions.AppException" />
     public class EmailNotSentException : AppException

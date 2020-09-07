@@ -24,10 +24,8 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using WebApi.Data;
 using WebApi.Helpers;
-using WebApi.Helpers.Exceptions;
 using WebApi.IServices;
 using WebApi.Models;
-using WebApi.Models.EnumerationTypes;
 using WebApi.Services;
 using Role = WebApi.Models.Role;
 
@@ -105,9 +103,8 @@ namespace WebApi
 
                             if (user != null)
                             {
-                                var claims = new List<Claim> {new Claim(ClaimTypes.Role, user.Role.Name)};
-                                var appIdentity = new ClaimsIdentity(claims);
-                                context.Principal.AddIdentity(appIdentity);
+                                var identity = context.Principal.Identity as ClaimsIdentity;
+                                identity.AddClaim(new Claim(ClaimTypes.Role, user.Role.Name));
                             }
                             else
                             {
@@ -174,6 +171,7 @@ namespace WebApi
             // Scoped objects are the same within a request, but different across different requests.
             // Singleton objects are the same for every object and every request.
             services.AddScoped<IPasswordHelper, PasswordHelper>();
+            services.AddScoped<IAuthHelper, AuthHelper>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IEmailService, EmailService>();
         }

@@ -3,7 +3,7 @@ using System;
 namespace WebApi.Controllers.DataTransferObjects.Role.GetAllAsync
 {
     /// <summary>
-    /// Data transfer object for the role summary response.
+    /// Data transfer object for the role "GetAll" response.
     /// </summary>
     public class ResponseDto
     {
