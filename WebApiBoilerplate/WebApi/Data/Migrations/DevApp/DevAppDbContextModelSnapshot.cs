@@ -2,21 +2,19 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApi.Data;
 
-namespace WebApi.Data.Migrations
+namespace WebApi.Data.Migrations.DevApp
 {
-    [DbContext(typeof(AppDbContext))]
-    [Migration("20200811163558_Initial")]
-    partial class Initial
+    [DbContext(typeof(DevAppDbContext))]
+    partial class DevAppDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.4");
+                .HasAnnotation("ProductVersion", "5.0.0");
 
             modelBuilder.Entity("WebApi.Models.Log", b =>
                 {
@@ -66,8 +64,8 @@ namespace WebApi.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("TEXT");
@@ -99,12 +97,12 @@ namespace WebApi.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(320);
+                        .HasMaxLength(320)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(30);
+                        .HasMaxLength(30)
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("INTEGER");
@@ -113,8 +111,8 @@ namespace WebApi.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(30);
+                        .HasMaxLength(30)
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("LoginFailedAt")
                         .HasColumnType("TEXT");
@@ -160,8 +158,8 @@ namespace WebApi.Data.Migrations
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(20);
+                        .HasMaxLength(20)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -189,6 +187,10 @@ namespace WebApi.Data.Migrations
                     b.HasOne("WebApi.Models.User", "UpdatedBy")
                         .WithMany("UpdatedRoles")
                         .HasForeignKey("UpdatedById");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("UpdatedBy");
                 });
 
             modelBuilder.Entity("WebApi.Models.User", b =>
@@ -204,6 +206,28 @@ namespace WebApi.Data.Migrations
                     b.HasOne("WebApi.Models.User", "UpdatedBy")
                         .WithMany("UpdatedUsers")
                         .HasForeignKey("UpdatedById");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("Role");
+
+                    b.Navigation("UpdatedBy");
+                });
+
+            modelBuilder.Entity("WebApi.Models.Role", b =>
+                {
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("WebApi.Models.User", b =>
+                {
+                    b.Navigation("CreatedRoles");
+
+                    b.Navigation("CreatedUsers");
+
+                    b.Navigation("UpdatedRoles");
+
+                    b.Navigation("UpdatedUsers");
                 });
 #pragma warning restore 612, 618
         }

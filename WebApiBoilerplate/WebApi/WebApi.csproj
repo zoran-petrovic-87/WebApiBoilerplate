@@ -41,9 +41,5 @@
       <EmbeddedResource Include="Resources\EmailTemplates\Email_PasswordReset_en.html" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Data\Migrations" />
-    </ItemGroup>
-
 
 </Project>

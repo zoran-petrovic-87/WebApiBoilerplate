@@ -63,7 +63,8 @@ namespace WebApi
                     policy => policy.RequireRole(Models.EnumerationTypes.Role.Admin.ToString()));
             });
 
-            services.AddDbContext<AppDbContext>();
+            if (_env.IsProduction()) services.AddDbContext<AppDbContext>();
+            else services.AddDbContext<AppDbContext, DevAppDbContext>();
 
             services.AddHealthChecks().AddDbContextCheck<AppDbContext>();
 

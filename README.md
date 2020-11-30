@@ -39,6 +39,22 @@ The *ASPNETCORE_* prefixed environment variables are read first for host configu
 
 Environment variables without the prefix are loaded after appsettings.json provided configuration. Between those two sources, the environment variable has the final word.
 
+## Migrations
+Project comes with generated initial migration. There are two database contexts:  
+* AppDbContext (PostgreSQL database, should be used in production environment)  
+* DevAppDbContext (SQLite database, should be used in development environment)  
+
+To generate initial migrations for ```AppDbContext``` use these commands:  
+```export ASPNETCORE_ENVIRONMENT=Production  
+dotnet ef migrations add InitialCreate --context AppDbContext --output-dir Data/Migrations/App```  
+
+To generate initial migrations for ```DevAppDbContext``` use these commands:  
+```export ASPNETCORE_ENVIRONMENT=Development  
+dotnet ef migrations add InitialCreate --context DevAppDbContext --output-dir Data/Migrations/DevApp```  
+
+Note that I used ```export``` command to set the value of ```ASPNETCORE_ENVIRONMENT``` environment variable. This is Bash Shell command.
+If you are using CMD (Command Prompt) then you should use the ```SET``` command.  
+
 ## Localization
 You can request localized response by sending culture in URL or sending *Accept-Language* in request header.  
 
