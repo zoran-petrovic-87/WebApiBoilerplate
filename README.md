@@ -1,11 +1,11 @@
-# Boilerplate project for ASP.NET Core WebAPI
+# Boilerplate project for ASP.NET Core WebAPI (.NET Core 5)
 
 ## Why?
 To save time. There are other boilerplates on GitHub but they are huge and they became framework on top of the framework.  
 The goal of this boilerplate is to be easy to grasp and extend.  
 
 ## Features
-* User registration and authentication.
+* User registration and authentication (using JWT).
 * Email verification.
 * Reset password via email.
 * Localization.
