@@ -46,11 +46,11 @@ Project comes with generated initial migration. There are two database contexts:
 
 To generate initial migrations for ```AppDbContext``` use these commands:  
 ```export ASPNETCORE_ENVIRONMENT=Production```  
-```dotnet ef migrations add InitialCreate --context AppDbContext --output-dir Data/Migrations/App```  
+```dotnet ef migrations add <REPLACE_WITH_MIGRATION_NAME> --context AppDbContext --output-dir Data/Migrations/App```  
 
 To generate initial migrations for ```DevAppDbContext``` use these commands:  
 ```export ASPNETCORE_ENVIRONMENT=Development```  
-```dotnet ef migrations add InitialCreate --context DevAppDbContext --output-dir Data/Migrations/DevApp```  
+```dotnet ef migrations add <REPLACE_WITH_MIGRATION_NAME> --context DevAppDbContext --output-dir Data/Migrations/DevApp```  
 
 Note that I used ```export``` command to set the value of ```ASPNETCORE_ENVIRONMENT``` environment variable. This is Bash Shell command.
 If you are using CMD (Command Prompt) then you should use the ```SET``` command.  
