@@ -20,6 +20,12 @@ namespace WebApi.Data
         private readonly IConfiguration _configuration;
 
         /// <summary>
+        /// The logger factory. Must be static to prevent memory leak.
+        /// </summary>
+        private static readonly ILoggerFactory LoggerFactory = Microsoft.Extensions.Logging.LoggerFactory.Create(
+            builder => { builder.AddConsole(); });
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="AppDbContext"/> class.
         /// </summary>
         public AppDbContext()
@@ -47,7 +53,7 @@ namespace WebApi.Data
             else
             {
                 optionsBuilder
-                    .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
+                    .UseLoggerFactory(LoggerFactory)
                     .UseSqlite(_configuration.GetConnectionString("WebApiDatabase"));
             }
         }
