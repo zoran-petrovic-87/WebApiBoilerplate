@@ -44,11 +44,11 @@ Project comes with generated initial migration. There are two database contexts:
 * AppDbContext (PostgreSQL database, should be used in production environment)  
 * DevAppDbContext (SQLite database, should be used in development environment)  
 
-To generate initial migrations for ```AppDbContext``` use these commands:  
+To generate migration for ```AppDbContext``` use these commands:  
 ```export ASPNETCORE_ENVIRONMENT=Production```  
 ```dotnet ef migrations add <REPLACE_WITH_MIGRATION_NAME> --context AppDbContext --output-dir Data/Migrations/App```  
 
-To generate initial migrations for ```DevAppDbContext``` use these commands:  
+To generate migration for ```DevAppDbContext``` use these commands:  
 ```export ASPNETCORE_ENVIRONMENT=Development```  
 ```dotnet ef migrations add <REPLACE_WITH_MIGRATION_NAME> --context DevAppDbContext --output-dir Data/Migrations/DevApp```  
 
