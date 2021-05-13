@@ -123,4 +123,7 @@
   <data name="RESOURCE:Email_PasswordReset.html" xml:space="preserve">
     <value>Email_PasswordReset_bs.html</value>
   </data>
+  <data name="Cannot update username." xml:space="preserve">
+    <value>Nije moguće promijeniti korisničko ime.</value>
+  </data>
 </root>

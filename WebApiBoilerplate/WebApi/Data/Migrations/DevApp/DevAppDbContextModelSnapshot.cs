@@ -100,7 +100,17 @@ namespace WebApi.Data.Migrations.DevApp
                         .HasMaxLength(320)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("FirstName")
+                    b.Property<string>("ExternalId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ExternalIdentityProvider")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FamilyName")
+                        .HasMaxLength(30)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("GivenName")
                         .HasMaxLength(30)
                         .HasColumnType("TEXT");
 
@@ -108,10 +118,6 @@ namespace WebApi.Data.Migrations.DevApp
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastLoginAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("LastName")
-                        .HasMaxLength(30)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("LoginFailedAt")
@@ -158,7 +164,7 @@ namespace WebApi.Data.Migrations.DevApp
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasMaxLength(20)
+                        .HasMaxLength(255)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

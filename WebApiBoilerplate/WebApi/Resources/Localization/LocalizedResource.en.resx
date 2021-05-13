@@ -123,4 +123,7 @@
   <data name="RESOURCE:Email_PasswordReset.html" xml:space="preserve">
     <value>Email_PasswordReset_en.html</value>
   </data>
+  <data name="Cannot update username." xml:space="preserve">
+    <value>Cannot update username.</value>
+  </data>
 </root>

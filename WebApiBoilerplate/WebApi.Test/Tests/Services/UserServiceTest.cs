@@ -89,8 +89,8 @@ namespace WebApi.Test.Tests.Services
             var dto = new DTO.RegisterAsync.RequestDto
             {
                 Username = "test_username",
-                FirstName = "My First Name",
-                LastName = "My Last Name",
+                GivenName = "My First Name",
+                FamilyName = "My Last Name",
                 Email = "myemail@example.com",
                 Password = "MyPassword123"
             };
@@ -100,13 +100,13 @@ namespace WebApi.Test.Tests.Services
 
             // Assert.
             Assert.Equal(dto.Username, response.Username);
-            Assert.Equal(dto.FirstName, response.FirstName);
-            Assert.Equal(dto.LastName, response.LastName);
+            Assert.Equal(dto.GivenName, response.GivenName);
+            Assert.Equal(dto.FamilyName, response.FamilyName);
 
             var user = _db.Users.Single(x => x.Username == dto.Username);
             Assert.Equal(dto.Username, user.Username);
-            Assert.Equal(dto.FirstName, user.FirstName);
-            Assert.Equal(dto.LastName, user.LastName);
+            Assert.Equal(dto.GivenName, user.GivenName);
+            Assert.Equal(dto.FamilyName, user.FamilyName);
             Assert.Equal(dto.Email, user.Email);
             Assert.True(_passwordHelper.VerifyHash(dto.Password, user.PasswordHash, user.PasswordSalt));
             Assert.True(user.IsActive);
@@ -129,8 +129,8 @@ namespace WebApi.Test.Tests.Services
             var dto = new DTO.RegisterAsync.RequestDto
             {
                 Username = "test_username",
-                FirstName = "My First Name",
-                LastName = "My Last Name",
+                GivenName = "My First Name",
+                FamilyName = "My Last Name",
                 Email = "myemail@example.com",
                 Password = password
             };
@@ -155,8 +155,8 @@ namespace WebApi.Test.Tests.Services
             var dto = new DTO.RegisterAsync.RequestDto
             {
                 Username = user.Username,
-                FirstName = "My First Name",
-                LastName = "My Last Name",
+                GivenName = "My First Name",
+                FamilyName = "My Last Name",
                 Email = "myemail@example.com",
                 Password = "MyPassword123"
             };
@@ -181,8 +181,8 @@ namespace WebApi.Test.Tests.Services
             var dto = new DTO.RegisterAsync.RequestDto
             {
                 Username = "test_username",
-                FirstName = "My First Name",
-                LastName = "My Last Name",
+                GivenName = "My First Name",
+                FamilyName = "My Last Name",
                 Email = user.Email,
                 Password = "MyPassword123"
             };
@@ -210,8 +210,8 @@ namespace WebApi.Test.Tests.Services
             var dto = new DTO.RegisterAsync.RequestDto
             {
                 Username = "test_username",
-                FirstName = "My First Name",
-                LastName = "My Last Name",
+                GivenName = "My First Name",
+                FamilyName = "My Last Name",
                 Email = "myemail@example.com",
                 Password = "MyPassword123"
             };
@@ -221,13 +221,13 @@ namespace WebApi.Test.Tests.Services
 
             // Assert.
             Assert.Equal(dto.Username, response.Username);
-            Assert.Equal(dto.FirstName, response.FirstName);
-            Assert.Equal(dto.LastName, response.LastName);
+            Assert.Equal(dto.GivenName, response.GivenName);
+            Assert.Equal(dto.FamilyName, response.FamilyName);
 
             var user = _db.Users.Single(x => x.Username == dto.Username);
             Assert.Equal(dto.Username, user.Username);
-            Assert.Equal(dto.FirstName, user.FirstName);
-            Assert.Equal(dto.LastName, user.LastName);
+            Assert.Equal(dto.GivenName, user.GivenName);
+            Assert.Equal(dto.FamilyName, user.FamilyName);
             Assert.Equal(dto.Email, user.UnconfirmedEmail);
             Assert.Null(user.Email);
             Assert.True(_passwordHelper.VerifyHash(dto.Password, user.PasswordHash, user.PasswordSalt));
@@ -250,8 +250,8 @@ namespace WebApi.Test.Tests.Services
             var dto = new DTO.RegisterAsync.RequestDto
             {
                 Username = "test_username",
-                FirstName = "My First Name",
-                LastName = "My Last Name",
+                GivenName = "My First Name",
+                FamilyName = "My Last Name",
                 Email = "myemail@example.com",
                 Password = password
             };
@@ -276,8 +276,8 @@ namespace WebApi.Test.Tests.Services
             var dto = new DTO.RegisterAsync.RequestDto
             {
                 Username = user.Username,
-                FirstName = "My First Name",
-                LastName = "My Last Name",
+                GivenName = "My First Name",
+                FamilyName = "My Last Name",
                 Email = "myemail@example.com",
                 Password = "MyPassword123"
             };
@@ -302,8 +302,8 @@ namespace WebApi.Test.Tests.Services
             var dto = new DTO.RegisterAsync.RequestDto
             {
                 Username = "test_username",
-                FirstName = "My First Name",
-                LastName = "My Last Name",
+                GivenName = "My First Name",
+                FamilyName = "My Last Name",
                 Email = user.Email,
                 Password = "MyPassword123"
             };
@@ -327,8 +327,8 @@ namespace WebApi.Test.Tests.Services
             var dto = new DTO.RegisterAsync.RequestDto
             {
                 Username = "test_username",
-                FirstName = "My First Name",
-                LastName = "My Last Name",
+                GivenName = "My First Name",
+                FamilyName = "My Last Name",
                 Email = "myemail@example.com",
                 Password = "MyPassword123"
             };
@@ -374,8 +374,8 @@ namespace WebApi.Test.Tests.Services
 
             // Assert.
             Assert.Equal(dto.Username, response.Username);
-            Assert.Equal(user.FirstName, response.FirstName);
-            Assert.Equal(user.LastName, response.LastName);
+            Assert.Equal(user.GivenName, response.GivenName);
+            Assert.Equal(user.FamilyName, response.FamilyName);
             Assert.Equal(user.Email, response.Email);
             Assert.NotNull(user.LastLoginAt);
             Assert.True(user.IsActive);
@@ -547,8 +547,8 @@ namespace WebApi.Test.Tests.Services
             {
                 Assert.Equal(expectedUsers[i].Id, actualUsers[i].Id);
                 Assert.Equal(expectedUsers[i].Username, actualUsers[i].Username);
-                Assert.Equal(expectedUsers[i].FirstName, actualUsers[i].FirstName);
-                Assert.Equal(expectedUsers[i].LastName, actualUsers[i].LastName);
+                Assert.Equal(expectedUsers[i].GivenName, actualUsers[i].FirstName);
+                Assert.Equal(expectedUsers[i].FamilyName, actualUsers[i].LastName);
                 Assert.Equal(expectedUsers[i].Email, actualUsers[i].Email);
             }
         }
@@ -574,8 +574,8 @@ namespace WebApi.Test.Tests.Services
             // Assert.
             Assert.Equal(user.Id, response.Id);
             Assert.Equal(user.Username, response.Username);
-            Assert.Equal(user.FirstName, response.FirstName);
-            Assert.Equal(user.LastName, response.LastName);
+            Assert.Equal(user.GivenName, response.GivenName);
+            Assert.Equal(user.FamilyName, response.FamilyName);
             Assert.Equal(user.Email, response.Email);
             Assert.Equal(user.CreatedAt, response.CreatedAt);
             Assert.Equal(user.UpdatedAt, response.UpdatedAt);
@@ -619,8 +619,8 @@ namespace WebApi.Test.Tests.Services
             var dto = new DTO.UpdateAsync.RequestDto
             {
                 Username = new UpdateStringField {NewValue = Guid.NewGuid().ToString()},
-                FirstName = new UpdateStringField {NewValue = Guid.NewGuid().ToString()},
-                LastName = new UpdateStringField {NewValue = Guid.NewGuid().ToString()},
+                GivenName = new UpdateStringField {NewValue = Guid.NewGuid().ToString()},
+                FamilyName = new UpdateStringField {NewValue = Guid.NewGuid().ToString()},
                 Email = new UpdateStringField {NewValue = Guid.NewGuid() + "@example.com"},
                 Password = new UpdateStringField {NewValue = Guid.NewGuid().ToString()}
             };
@@ -632,8 +632,8 @@ namespace WebApi.Test.Tests.Services
             var actualUser = _db.Users.Single(x => x.Id == user.Id);
 
             Assert.Equal(dto.Username.NewValue, actualUser.Username);
-            Assert.Equal(dto.FirstName.NewValue, actualUser.FirstName);
-            Assert.Equal(dto.LastName.NewValue, actualUser.LastName);
+            Assert.Equal(dto.GivenName.NewValue, actualUser.GivenName);
+            Assert.Equal(dto.FamilyName.NewValue, actualUser.FamilyName);
             Assert.Equal(dto.Email.NewValue, actualUser.UnconfirmedEmail);
             Assert.NotNull(actualUser.UpdatedAt);
             Assert.True(
@@ -654,8 +654,8 @@ namespace WebApi.Test.Tests.Services
             var dto = new DTO.UpdateAsync.RequestDto
             {
                 Username = null,
-                FirstName = null,
-                LastName = null,
+                GivenName = null,
+                FamilyName = null,
                 Email = null,
                 Password = null
             };
@@ -667,8 +667,8 @@ namespace WebApi.Test.Tests.Services
             var actualUser = _db.Users.Single(x => x.Id == user.Id);
 
             Assert.Equal(user.Username, actualUser.Username);
-            Assert.Equal(user.FirstName, actualUser.FirstName);
-            Assert.Equal(user.LastName, actualUser.LastName);
+            Assert.Equal(user.GivenName, actualUser.GivenName);
+            Assert.Equal(user.FamilyName, actualUser.FamilyName);
             Assert.Equal(user.Email, actualUser.Email);
             Assert.NotNull(actualUser.UpdatedAt);
             Assert.Equal(user.PasswordHash, actualUser.PasswordHash);

@@ -123,13 +123,13 @@
   <data name="Email '{0}' is already taken." xml:space="preserve">
     <value>Email adresa '{0}' je zauzeta. </value>
   </data>
-  <data name="First name cannot be empty." xml:space="preserve">
+  <data name="Given name cannot be empty." xml:space="preserve">
     <value>Ime ne može biti prazno.</value>
   </data>
-  <data name="First name cannot be longer than {0} characters." xml:space="preserve">
+  <data name="Given name cannot be longer than {0} characters." xml:space="preserve">
     <value>Ime ne može imati više od {0} znakova.</value>
   </data>
-  <data name="First name must be at least {0} characters long." xml:space="preserve">
+  <data name="Given name must be at least {0} characters long." xml:space="preserve">
     <value>Ime mora imati najmanje {0} znakova.</value>
   </data>
   <data name="Invalid code." xml:space="preserve">
@@ -144,13 +144,13 @@
   <data name="Invalid length of password salt (128 bytes expected)." xml:space="preserve">
     <value>Netačna dužina za salt lozinke (očekivano 128 byte-a).</value>
   </data>
-  <data name="Last name cannot be empty." xml:space="preserve">
+  <data name="Family name cannot be empty." xml:space="preserve">
     <value>Prezime ne može biti prazno.</value>
   </data>
-  <data name="Last name cannot be longer than {0} characters." xml:space="preserve">
+  <data name="Family name cannot be longer than {0} characters." xml:space="preserve">
     <value>Prezime ne može imati više od {0} znakova.</value>
   </data>
-  <data name="Last name must be at least {0} characters long." xml:space="preserve">
+  <data name="Family name must be at least {0} characters long." xml:space="preserve">
     <value>Prezime mora imati najmanje {0} znakova.</value>
   </data>
   <data name="Password cannot be empty." xml:space="preserve">
@@ -218,5 +218,17 @@
   </data>
   <data name="Sending of email failed." xml:space="preserve">
     <value>Slanje emaila nije uspjelo.</value>
+  </data>
+  <data name="Cannot update given name." xml:space="preserve">
+    <value>Nije moguće promijeniti ime.</value>
+  </data>
+  <data name="Cannot update family name." xml:space="preserve">
+    <value>Nije moguće promijeniti prezime.</value>
+  </data>
+  <data name="Cannot update password." xml:space="preserve">
+    <value>Nije moguće promijeniti lozinku.</value>
+  </data>
+  <data name="Cannot update email." xml:space="preserve">
+    <value>Nije moguće promijeniti email.</value>
   </data>
 </root>

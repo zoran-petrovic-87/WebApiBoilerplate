@@ -66,9 +66,9 @@ namespace WebApi.Data
                 b.HasKey(x => x.Id);
                 b.Property(x => x.Id).ValueGeneratedNever();
                 b.HasIndex(x => x.Username);
-                b.Property(x => x.Username).IsRequired().HasMaxLength(20);
-                b.Property(x => x.FirstName).HasMaxLength(30);
-                b.Property(x => x.LastName).HasMaxLength(30);
+                b.Property(x => x.Username).IsRequired().HasMaxLength(255);
+                b.Property(x => x.GivenName).HasMaxLength(30);
+                b.Property(x => x.FamilyName).HasMaxLength(30);
                 b.Property(x => x.Email).HasMaxLength(320);
                 b.Property(x => x.CreatedAt).IsRequired();
                 b.HasIndex(x => x.IsActive);

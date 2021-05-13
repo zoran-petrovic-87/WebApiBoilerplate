@@ -14,20 +14,20 @@ namespace WebApi.Controllers.DataTransferObjects.User.UpdateAsync
         public UpdateStringField Username { get; set; }
 
         /// <summary>
-        /// Gets or sets the first name.
+        /// Gets or sets the given name.
         /// </summary>
         /// <value>
-        /// The first name.
+        /// The given name.
         /// </value>
-        public UpdateStringField FirstName { get; set; }
+        public UpdateStringField GivenName { get; set; }
 
         /// <summary>
-        /// Gets or sets the last name.
+        /// Gets or sets the family name.
         /// </summary>
         /// <value>
-        /// The last name.
+        /// The family name.
         /// </value>
-        public UpdateStringField LastName { get; set; }
+        public UpdateStringField FamilyName { get; set; }
 
         /// <summary>
         /// Gets or sets the email.

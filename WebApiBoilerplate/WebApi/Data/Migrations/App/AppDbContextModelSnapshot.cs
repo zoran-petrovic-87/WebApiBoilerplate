@@ -104,7 +104,17 @@ namespace WebApi.Data.Migrations.App
                         .HasMaxLength(320)
                         .HasColumnType("character varying(320)");
 
-                    b.Property<string>("FirstName")
+                    b.Property<string>("ExternalId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ExternalIdentityProvider")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FamilyName")
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
+
+                    b.Property<string>("GivenName")
                         .HasMaxLength(30)
                         .HasColumnType("character varying(30)");
 
@@ -113,10 +123,6 @@ namespace WebApi.Data.Migrations.App
 
                     b.Property<DateTime?>("LastLoginAt")
                         .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("LastName")
-                        .HasMaxLength(30)
-                        .HasColumnType("character varying(30)");
 
                     b.Property<DateTime?>("LoginFailedAt")
                         .HasColumnType("timestamp without time zone");
@@ -162,8 +168,8 @@ namespace WebApi.Data.Migrations.App
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.HasKey("Id");
 

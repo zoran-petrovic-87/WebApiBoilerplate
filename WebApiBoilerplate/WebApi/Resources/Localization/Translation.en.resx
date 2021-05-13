@@ -123,14 +123,14 @@
   <data name="Email '{0}' is already taken." xml:space="preserve">
     <value>Email '{0}' is already taken.</value>
   </data>
-  <data name="First name cannot be empty." xml:space="preserve">
-    <value>First name cannot be empty.</value>
+  <data name="Given name cannot be empty." xml:space="preserve">
+    <value>Given name cannot be empty.</value>
   </data>
-  <data name="First name cannot be longer than {0} characters." xml:space="preserve">
-    <value>First name cannot be longer than {0} characters.</value>
+  <data name="Given name cannot be longer than {0} characters." xml:space="preserve">
+    <value>Given name cannot be longer than {0} characters.</value>
   </data>
-  <data name="First name must be at least {0} characters long." xml:space="preserve">
-    <value>First name must be at least {0} characters long.</value>
+  <data name="Given name must be at least {0} characters long." xml:space="preserve">
+    <value>Given name must be at least {0} characters long.</value>
   </data>
   <data name="Invalid code." xml:space="preserve">
     <value>Invalid code.</value>
@@ -144,14 +144,14 @@
   <data name="Invalid length of password salt (128 bytes expected)." xml:space="preserve">
     <value>Invalid length of password salt (128 bytes expected).</value>
   </data>
-  <data name="Last name cannot be empty." xml:space="preserve">
-    <value>Last name cannot be empty.</value>
+  <data name="Family name cannot be empty." xml:space="preserve">
+    <value>Family name cannot be empty.</value>
   </data>
-  <data name="Last name cannot be longer than {0} characters." xml:space="preserve">
-    <value>Last name cannot be longer than {0} characters.</value>
+  <data name="Family name cannot be longer than {0} characters." xml:space="preserve">
+    <value>Family name cannot be longer than {0} characters.</value>
   </data>
-  <data name="Last name must be at least {0} characters long." xml:space="preserve">
-    <value>Last name must be at least {0} characters long.</value>
+  <data name="Family name must be at least {0} characters long." xml:space="preserve">
+    <value>Family name must be at least {0} characters long.</value>
   </data>
   <data name="Password cannot be empty." xml:space="preserve">
     <value>Password cannot be empty.</value>
@@ -218,5 +218,17 @@
   </data>
   <data name="Sending of email failed." xml:space="preserve">
     <value>Sending of email failed.</value>
+  </data>
+  <data name="Cannot update given name." xml:space="preserve">
+    <value>Cannot update given name.</value>
+  </data>
+  <data name="Cannot update family name." xml:space="preserve">
+    <value>Cannot update family name.</value>
+  </data>
+  <data name="Cannot update password." xml:space="preserve">
+    <value>Cannot update password.</value>
+  </data>
+  <data name="Cannot update email." xml:space="preserve">
+    <value>Cannot update email.</value>
   </data>
 </root>

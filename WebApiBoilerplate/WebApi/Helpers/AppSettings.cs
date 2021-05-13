@@ -146,5 +146,15 @@ namespace WebApi.Helpers
         /// The administrator password.
         /// </value>
         public string AdminPassword { get; set; }
+
+        /// <summary>
+        /// Gets or sets Google client ID.
+        /// </summary>
+        public string OidcGoogleClientId { get; set; }
+        
+        /// <summary>
+        /// Gets or sets Google client secret.
+        /// </summary>
+        public string OidcGoogleClientSecret { get; set; }
     }
 }

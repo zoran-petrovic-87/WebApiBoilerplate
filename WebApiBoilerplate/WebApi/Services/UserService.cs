@@ -103,27 +103,59 @@ namespace WebApi.Services
             user.LastLoginAt = DateTime.UtcNow;
             await _db.SaveChangesAsync();
 
-            // Create token.
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-            var tokenDescriptor = new SecurityTokenDescriptor
+            return new Dto.AuthenticateAsync.ResponseDto
             {
-                Subject = new ClaimsIdentity(new[] {new Claim(ClaimTypes.Name, user.Id.ToString())}),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
-                    SecurityAlgorithms.HmacSha256Signature)
+                Id = user.Id,
+                Username = user.Username,
+                GivenName = user.GivenName,
+                FamilyName = user.FamilyName,
+                Email = user.Email,
+                Token = CreateToken(user.Id.ToString())
             };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
+        }
+
+        /// <inheritdoc />
+        public async Task<Dto.AuthenticateAsync.ResponseDto> AuthenticateExternalAsync(string externalIdentityProvider,
+            string externalId, string email, string givenName, string familyName)
+        {
+            var user = await _db.Users.SingleOrDefaultAsync(x =>
+                x.ExternalIdentityProvider == externalIdentityProvider && x.ExternalId == externalId);
+            var now = DateTime.UtcNow;
+
+            // Create a user if doesn't exist.
+            if (user == null)
+            {
+                user = new User
+                {
+                    Id = Guid.NewGuid(),
+                    ExternalId = externalId,
+                    ExternalIdentityProvider = externalIdentityProvider,
+                    Username = $"{externalId}|{externalIdentityProvider}",
+                    CreatedAt = now,
+                    IsActive = true
+                };
+                await _db.Users.AddAsync(user);
+            }
+
+            user.GivenName = givenName;
+            user.FamilyName = familyName;
+            user.Email = email;
+            user.UpdatedAt = now;
+
+            // Authentication successful.
+            user.LoginFailedCount = 0;
+            user.LoginFailedAt = null;
+            user.LastLoginAt = now;
+            await _db.SaveChangesAsync();
 
             return new Dto.AuthenticateAsync.ResponseDto
             {
                 Id = user.Id,
                 Username = user.Username,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
+                GivenName = user.GivenName,
+                FamilyName = user.FamilyName,
                 Email = user.Email,
-                Token = tokenString
+                Token = CreateToken(user.Id.ToString())
             };
         }
 
@@ -147,8 +179,8 @@ namespace WebApi.Services
             var user = new User
             {
                 Id = Guid.NewGuid(),
-                FirstName = dto.FirstName,
-                LastName = dto.LastName,
+                GivenName = dto.GivenName,
+                FamilyName = dto.FamilyName,
                 Username = dto.Username,
                 IsActive = false
                 // Email must be confirmed first.
@@ -167,8 +199,8 @@ namespace WebApi.Services
             {
                 Id = user.Id,
                 Username = user.Username,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
+                GivenName = user.GivenName,
+                FamilyName = user.FamilyName,
                 Email = user.Email,
                 CreatedAt = user.CreatedAt,
                 UpdatedAt = user.UpdatedAt,
@@ -197,8 +229,8 @@ namespace WebApi.Services
             var user = new User
             {
                 Id = Guid.NewGuid(),
-                FirstName = dto.FirstName,
-                LastName = dto.LastName,
+                GivenName = dto.GivenName,
+                FamilyName = dto.FamilyName,
                 Username = dto.Username,
                 IsActive = true,
                 Email = dto.Email,
@@ -215,8 +247,8 @@ namespace WebApi.Services
             {
                 Id = user.Id,
                 Username = user.Username,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
+                GivenName = user.GivenName,
+                FamilyName = user.FamilyName,
                 Email = user.Email,
                 CreatedAt = user.CreatedAt,
                 UpdatedAt = user.UpdatedAt,
@@ -234,8 +266,8 @@ namespace WebApi.Services
                 .Select(x => new Dto.GetAll.ResponseDto
                 {
                     Id = x.Id,
-                    FirstName = x.FirstName,
-                    LastName = x.LastName,
+                    FirstName = x.GivenName,
+                    LastName = x.FamilyName,
                     Username = x.Username,
                     Email = x.Email,
                     Role = x.Role == null
@@ -255,8 +287,8 @@ namespace WebApi.Services
                 {
                     Id = x.Id,
                     Username = x.Username,
-                    FirstName = x.FirstName,
-                    LastName = x.LastName,
+                    GivenName = x.GivenName,
+                    FamilyName = x.FamilyName,
                     Email = x.Email,
                     CreatedAt = x.CreatedAt,
                     UpdatedAt = x.UpdatedAt,
@@ -282,10 +314,12 @@ namespace WebApi.Services
 
             var user = await _db.Users.Include(x => x.Role).FirstOrDefaultAsync(x => x.Id == id);
             if (user == null) throw new EntityNotFoundException(_l["User not found."]);
+            var isExternalUser = user.ExternalId != null;
 
             // Update username if it has changed.
             if (dto.Username != null && dto.Username.NewValue != user.Username)
             {
+                if(isExternalUser) throw new UpdateReadOnlyPropertyException(_l["Cannot update username."]);
                 // Throw error if the new username is already taken.
                 if (_db.Users.Any(x => x.Username == dto.Username.NewValue))
                     throw new UsernameTakenException(string.Format(
@@ -294,12 +328,22 @@ namespace WebApi.Services
             }
 
             // Update user properties if provided.
-            if (dto.FirstName != null) user.FirstName = dto.FirstName.NewValue;
-            if (dto.LastName != null) user.LastName = dto.LastName.NewValue;
+            if (dto.GivenName != null)
+            {
+                if(isExternalUser) throw new UpdateReadOnlyPropertyException(_l["Cannot update given name."]);
+                user.GivenName = dto.GivenName.NewValue;
+            }
+
+            if (dto.FamilyName != null)
+            {
+                if(isExternalUser) throw new UpdateReadOnlyPropertyException(_l["Cannot update family name."]);
+                user.FamilyName = dto.FamilyName.NewValue;
+            }
 
             // Update password if provided.
             if (dto.Password != null)
             {
+                if(isExternalUser) throw new UpdateReadOnlyPropertyException(_l["Cannot update password."]);
                 var (passwordHash, passwordSalt) = _passwordHelper.CreateHash(dto.Password.NewValue);
                 user.PasswordHash = passwordHash;
                 user.PasswordSalt = passwordSalt;
@@ -308,6 +352,7 @@ namespace WebApi.Services
             // Update email if provided.
             if (dto.Email != null)
             {
+                if(isExternalUser) throw new UpdateReadOnlyPropertyException(_l["Cannot update email."]);
                 var emailSuccess = await ChangeEmailAsync(user, dto.Email.NewValue);
                 if (!emailSuccess) throw new EmailNotSentException(_l["Sending of confirmation email failed."]);
             }
@@ -321,8 +366,8 @@ namespace WebApi.Services
             {
                 Id = user.Id,
                 Username = user.Username,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
+                GivenName = user.GivenName,
+                FamilyName = user.FamilyName,
                 Email = user.Email,
                 CreatedAt = user.CreatedAt,
                 UpdatedAt = user.UpdatedAt,
@@ -373,7 +418,7 @@ namespace WebApi.Services
         /// <inheritdoc />
         public async Task PasswordResetAsync(Dto.PasswordResetAsync.RequestDto dto)
         {
-            var user = await _db.Users.FirstOrDefaultAsync(x => x.Email == dto.Email);
+            var user = await _db.Users.FirstOrDefaultAsync(x => x.Email == dto.Email && x.ExternalId == null);
             if (user == null)
                 throw new EntityNotFoundException(_l["Something went wrong... Please contact support."]);
 
@@ -482,6 +527,26 @@ namespace WebApi.Services
             // Send an email.
             return await _emailService.SendAsync(_appSettings.Email, _appSettings.EmailName, newEmail,
                 _l["Confirm your email"], emailBody, null);
+        }
+
+        /// <summary>
+        /// Creates authentication token.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns>The authentication token.</returns>
+        private string CreateToken(string userId)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[] {new Claim(ClaimTypes.Name, userId)}),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
+                    SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
 
         #endregion

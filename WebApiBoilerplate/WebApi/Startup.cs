@@ -8,7 +8,9 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -20,6 +22,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using WebApi.Data;
@@ -96,20 +99,26 @@ namespace WebApi
                         OnTokenValidated = context =>
                         {
                             var db = context.HttpContext.RequestServices.GetRequiredService<AppDbContext>();
-                            var userId = context.Principal.Identity.Name;
-                            if (userId == null) context.Fail("Unauthorized");
+                            var userId = context.Principal?.Identity?.Name;
+                            if (userId == null)
+                            {
+                                context.Fail("Unauthorized");
+                                return Task.CompletedTask;
+                            }
 
                             var user = db.Users.AsNoTracking().Include(x => x.Role)
                                 .FirstOrDefault(x => x.Id == Guid.Parse(userId));
 
-                            if (user != null)
-                            {
-                                var identity = context.Principal.Identity as ClaimsIdentity;
-                                identity.AddClaim(new Claim(ClaimTypes.Role, user.Role.Name));
-                            }
-                            else
+                            if (user == null)
                             {
                                 context.Fail("Unauthorized");
+                                return Task.CompletedTask;
+                            }
+
+                            if (user.RoleId != null)
+                            {
+                                var identity = context.Principal?.Identity as ClaimsIdentity;
+                                identity?.AddClaim(new Claim(ClaimTypes.Role, user.Role.Name));
                             }
 
                             return Task.CompletedTask;
@@ -124,7 +133,22 @@ namespace WebApi
                         ValidateIssuer = false,
                         ValidateAudience = false
                     };
-                });
+                })
+                .AddOpenIdConnect("oidc-google", options =>
+                {
+                    options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.Authority = "https://accounts.google.com";
+                    options.RequireHttpsMetadata = false;
+                    options.ClientId = _appSettings.OidcGoogleClientId;
+                    options.ClientSecret = _appSettings.OidcGoogleClientSecret;
+                    options.ResponseType = $"{OpenIdConnectParameterNames.Code} {OpenIdConnectParameterNames.IdToken}";
+                    options.SaveTokens = true;
+                    options.GetClaimsFromUserInfoEndpoint = true;
+                    options.Scope.Add("openid");
+                    options.Scope.Add("profile");
+                    options.Scope.Add("email");
+                })
+                .AddCookie();
 
             // Add Swagger.
             services.AddSwaggerGen(configuration =>

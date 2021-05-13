@@ -14,8 +14,20 @@ namespace WebApi.IServices
         /// Authenticates the specified user.
         /// </summary>
         /// <param name="dto">The <see cref="Dto.AuthenticateAsync.RequestDto"/> data transfer object.</param>
-        /// <returns>The user.</returns>
+        /// <returns>The user info with token.</returns>
         Task<Dto.AuthenticateAsync.ResponseDto> AuthenticateAsync(Dto.AuthenticateAsync.RequestDto dto);
+
+        /// <summary>
+        /// Authenticates the external user.
+        /// </summary>
+        /// <param name="externalIdentityProvider">The external identity provider.</param>
+        /// <param name="externalId">The identifier used by external identity provider.</param>
+        /// <param name="email">The email.</param>
+        /// <param name="givenName">The given name.</param>
+        /// <param name="familyName">The family name.</param>
+        /// <returns>The user info with token.</returns>
+        Task<Dto.AuthenticateAsync.ResponseDto> AuthenticateExternalAsync(string externalIdentityProvider,
+            string externalId, string email, string givenName, string familyName);
 
         /// <summary>
         /// Registers the new user.

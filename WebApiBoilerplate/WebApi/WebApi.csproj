@@ -9,6 +9,7 @@
     <ItemGroup>
       <PackageReference Include="FluentValidation.AspNetCore" Version="9.3.0" />
       <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.3" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.0">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -39,6 +40,11 @@
       <EmbeddedResource Include="Resources\EmailTemplates\Email_ConfirmEmail_en.html" />
       <EmbeddedResource Include="Resources\EmailTemplates\Email_PasswordReset_bs.html" />
       <EmbeddedResource Include="Resources\EmailTemplates\Email_PasswordReset_en.html" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Data\Migrations\App" />
+      <Folder Include="Data\Migrations\DevApp" />
     </ItemGroup>
 
 

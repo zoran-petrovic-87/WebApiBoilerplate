@@ -49,8 +49,8 @@ namespace WebApi.Test.Helpers
                 {
                     Id = Guid.NewGuid(),
                     Username = "user" + i,
-                    FirstName = "First name " + i,
-                    LastName = "Last name " + i,
+                    GivenName = "First name " + i,
+                    FamilyName = "Last name " + i,
                     Email = $"email{i}@example.com",
                     CreatedAt = DateTime.UtcNow,
                     PasswordHash = passwordHash,

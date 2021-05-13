@@ -46,39 +46,39 @@ namespace WebApi.Controllers.DataTransferObjects
         }
 
         /// <summary>
-        /// Validates the first name.
+        /// Validates the given name.
         /// </summary>
         /// <typeparam name="T">Type of the object.</typeparam>
         /// <param name="ruleBuilderOptions">The rule builder options.</param>
         /// <param name="l">The localizer.</param>
         /// <returns>The rule builder options.</returns>
-        public static IRuleBuilderOptions<T, string> FirstName<T>(this IRuleBuilder<T, string> ruleBuilderOptions,
+        public static IRuleBuilderOptions<T, string> GivenName<T>(this IRuleBuilder<T, string> ruleBuilderOptions,
             IStringLocalizer l)
         {
             return ruleBuilderOptions
-                .NotEmpty().WithMessage(l["First name cannot be empty."])
+                .NotEmpty().WithMessage(l["Given name cannot be empty."])
                 .MinimumLength(2)
-                .WithMessage(string.Format(l["First name must be at least {0} characters long."], 2))
+                .WithMessage(string.Format(l["Given name must be at least {0} characters long."], 2))
                 .MaximumLength(30)
-                .WithMessage(string.Format(l["First name cannot be longer than {0} characters."], 30));
+                .WithMessage(string.Format(l["Given name cannot be longer than {0} characters."], 30));
         }
 
         /// <summary>
-        /// Validates the last name.
+        /// Validates the family name.
         /// </summary>
         /// <typeparam name="T">The rule builder options.</typeparam>
         /// <param name="ruleBuilderOptions">The rule builder options.</param>
         /// <param name="l">The localizer.</param>
         /// <returns>The rule builder options.</returns>
-        public static IRuleBuilderOptions<T, string> LastName<T>(this IRuleBuilder<T, string> ruleBuilderOptions,
+        public static IRuleBuilderOptions<T, string> FamilyName<T>(this IRuleBuilder<T, string> ruleBuilderOptions,
             IStringLocalizer l)
         {
             return ruleBuilderOptions
-                .NotEmpty().WithMessage(l["Last name cannot be empty."])
+                .NotEmpty().WithMessage(l["Family name cannot be empty."])
                 .MinimumLength(2)
-                .WithMessage(string.Format(l["Last name must be at least {0} characters long."], 2))
+                .WithMessage(string.Format(l["Family name must be at least {0} characters long."], 2))
                 .MaximumLength(30)
-                .WithMessage(string.Format(l["Last name cannot be longer than {0} characters."], 30));
+                .WithMessage(string.Format(l["Family name cannot be longer than {0} characters."], 30));
         }
 
         /// <summary>

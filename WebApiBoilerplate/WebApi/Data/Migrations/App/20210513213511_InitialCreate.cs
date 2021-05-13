@@ -1,62 +1,61 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace WebApi.Data.Migrations.DevApp
+namespace WebApi.Data.Migrations.App
 {
-    /// <summary>
-    /// Migration class that creates initial database.
-    /// </summary>
     public partial class InitialCreate : Migration
     {
-        /// <summary>
-        /// Creates initial database.
-        /// </summary>
-        /// <param name="migrationBuilder">The migration builder.</param>
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
                 name: "Logs",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Application = table.Column<string>(type: "TEXT", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Level = table.Column<string>(type: "TEXT", nullable: true),
-                    Message = table.Column<string>(type: "TEXT", nullable: true),
-                    Logger = table.Column<string>(type: "TEXT", nullable: true),
-                    CallSite = table.Column<string>(type: "TEXT", nullable: true),
-                    Exception = table.Column<string>(type: "TEXT", nullable: true)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Application = table.Column<string>(type: "text", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Level = table.Column<string>(type: "text", nullable: true),
+                    Message = table.Column<string>(type: "text", nullable: true),
+                    Logger = table.Column<string>(type: "text", nullable: true),
+                    CallSite = table.Column<string>(type: "text", nullable: true),
+                    Exception = table.Column<string>(type: "text", nullable: true)
                 },
-                constraints: table => { table.PrimaryKey("PK_Logs", x => x.Id); });
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Logs", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Username = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
-                    FirstName = table.Column<string>(type: "TEXT", maxLength: 30, nullable: true),
-                    LastName = table.Column<string>(type: "TEXT", maxLength: 30, nullable: true),
-                    Email = table.Column<string>(type: "TEXT", maxLength: 320, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    CreatedById = table.Column<Guid>(type: "TEXT", nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    UpdatedById = table.Column<Guid>(type: "TEXT", nullable: true),
-                    RoleId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    LastLoginAt = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    LoginFailedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    LoginFailedCount = table.Column<int>(type: "INTEGER", nullable: false),
-                    UnconfirmedEmail = table.Column<string>(type: "TEXT", nullable: true),
-                    UnconfirmedEmailCreatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    UnconfirmedEmailCode = table.Column<string>(type: "TEXT", nullable: true),
-                    UnconfirmedEmailCount = table.Column<int>(type: "INTEGER", nullable: false),
-                    ResetPasswordCreatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    ResetPasswordCount = table.Column<int>(type: "INTEGER", nullable: false),
-                    ResetPasswordCode = table.Column<string>(type: "TEXT", nullable: true),
-                    PasswordHash = table.Column<byte[]>(type: "BLOB", nullable: true),
-                    PasswordSalt = table.Column<byte[]>(type: "BLOB", nullable: true),
-                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ExternalId = table.Column<string>(type: "text", nullable: true),
+                    ExternalIdentityProvider = table.Column<string>(type: "text", nullable: true),
+                    Username = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    GivenName = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: true),
+                    FamilyName = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: true),
+                    Email = table.Column<string>(type: "character varying(320)", maxLength: 320, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    UpdatedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    RoleId = table.Column<Guid>(type: "uuid", nullable: true),
+                    LastLoginAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    LoginFailedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    LoginFailedCount = table.Column<int>(type: "integer", nullable: false),
+                    UnconfirmedEmail = table.Column<string>(type: "text", nullable: true),
+                    UnconfirmedEmailCreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    UnconfirmedEmailCode = table.Column<string>(type: "text", nullable: true),
+                    UnconfirmedEmailCount = table.Column<int>(type: "integer", nullable: false),
+                    ResetPasswordCreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    ResetPasswordCount = table.Column<int>(type: "integer", nullable: false),
+                    ResetPasswordCode = table.Column<string>(type: "text", nullable: true),
+                    PasswordHash = table.Column<byte[]>(type: "bytea", nullable: true),
+                    PasswordSalt = table.Column<byte[]>(type: "bytea", nullable: true),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -79,13 +78,13 @@ namespace WebApi.Data.Migrations.DevApp
                 name: "Roles",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    CreatedById = table.Column<Guid>(type: "TEXT", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    UpdatedById = table.Column<Guid>(type: "TEXT", nullable: true),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 64, nullable: false),
-                    Description = table.Column<string>(type: "TEXT", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    CreatedById = table.Column<Guid>(type: "uuid", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    UpdatedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    Name = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -154,10 +153,6 @@ namespace WebApi.Data.Migrations.DevApp
                 onDelete: ReferentialAction.Restrict);
         }
 
-        /// <summary>
-        /// Reverts everything that was created by <c>Up</c> method.
-        /// </summary>
-        /// <param name="migrationBuilder">The migration builder.</param>
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(

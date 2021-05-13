@@ -26,20 +26,20 @@ namespace WebApi.Controllers.DataTransferObjects.User.GetDetailsAsync
         public string Username { get; set; }
 
         /// <summary>
-        /// Gets or sets the first name.
+        /// Gets or sets the given name.
         /// </summary>
         /// <value>
-        /// The first name.
+        /// The given name.
         /// </value>
-        public string FirstName { get; set; }
+        public string GivenName { get; set; }
 
         /// <summary>
-        /// Gets or sets the last name.
+        /// Gets or sets the family name.
         /// </summary>
         /// <value>
-        /// The last name.
+        /// The family name.
         /// </value>
-        public string LastName { get; set; }
+        public string FamilyName { get; set; }
 
         /// <summary>
         /// Gets or sets the email.

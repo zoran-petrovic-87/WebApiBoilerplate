@@ -6,7 +6,8 @@ To save time. There are other boilerplates on GitHub but they are huge and they 
 The goal of this boilerplate is to be easy to grasp and extend.  
 
 ## Features
-* User registration and authentication (using JWT).
+* User registration and authentication using JWT.
+* User registration and authentication using Google OAuth2 / OIDC.
 * Email verification.
 * Reset password via email.
 * Localization.
@@ -63,6 +64,20 @@ In url:
 ```https://localhost:5001/User/authenticate?culture=bs```  
 In header:  
 ```Accept-Language: bs```
+
+## User login with OAuth2 / OIDC
+Users can login with their Google account.  
+You can easily setup any other OAuth2/OIDC identity provider, such as Facebook. Just search for "oidc-google" in the code and see how it is done.  
+To configure login with Google, make sure that environment variables ```AppSettings__OidcGoogleClientId``` and ```AppSettings__OidcGoogleClientSecretare``` are set.  
+
+To start login flow, navigate to ```https://localhost:5001/ExternalUser/loginWithGoogle```. This HTTP request must be done in web browser!
+
+Flow goes like this:
+* User gets redirected to Google.com
+* User continues with login on Google domain
+* After login user is redirected back to our backend
+* We check if user is already in our db (if not we add him)
+* We create our own token and send it back to user  
 
 ## Note
 I will not use _Identity_ system as it introduces too much complexity for simple projects and for people starting with ASP.NET.  

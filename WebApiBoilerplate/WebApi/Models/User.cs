@@ -17,6 +17,22 @@ namespace WebApi.Models
         public Guid Id { get; set; }
 
         /// <summary>
+        /// Gets or sets the identifier used by external identity provider.
+        /// </summary>
+        /// <value>
+        /// The identifier used by external identity provider.
+        /// </value>
+        public string ExternalId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the external identity provider.
+        /// </summary>
+        /// <value>
+        /// The external identity provider.
+        /// </value>
+        public string ExternalIdentityProvider { get; set; }
+
+        /// <summary>
         /// Gets or sets the username.
         /// </summary>
         /// <value>
@@ -25,20 +41,20 @@ namespace WebApi.Models
         public string Username { get; set; }
 
         /// <summary>
-        /// Gets or sets the first name.
+        /// Gets or sets the given name.
         /// </summary>
         /// <value>
-        /// The first name.
+        /// The given name.
         /// </value>
-        public string FirstName { get; set; }
+        public string GivenName { get; set; }
 
         /// <summary>
-        /// Gets or sets the last name.
+        /// Gets or sets the family name.
         /// </summary>
         /// <value>
-        /// The last name.
+        /// The family name.
         /// </value>
-        public string LastName { get; set; }
+        public string FamilyName { get; set; }
 
         /// <summary>
         /// Gets or sets the email.
