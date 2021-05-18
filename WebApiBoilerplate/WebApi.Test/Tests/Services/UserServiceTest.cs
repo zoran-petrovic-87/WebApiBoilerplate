@@ -516,6 +516,83 @@ namespace WebApi.Test.Tests.Services
 
         #endregion
 
+        #region AuthenticateExternalAsync
+
+        /// <summary>
+        /// Tests external user authentication.
+        /// It should authenticate a user.
+        /// </summary>
+        /// <returns>The task.</returns>
+        [Fact]
+        public async Task AuthenticateExternalAsync_WhenCalled_AuthenticatesUser()
+        {
+            // Arrange.
+            var user = _factory.CreateUsers(2, "AbcAbc123")[0];
+            user.PasswordHash = null;
+            user.PasswordSalt = null;
+            user.ExternalId = Guid.NewGuid().ToString();
+            user.ExternalIdentityProvider = Guid.NewGuid().ToString();
+            await _db.SaveChangesAsync();
+
+            // Act.
+            var response = await _service.AuthenticateExternalAsync(user.ExternalIdentityProvider, user.ExternalId,
+                user.Email, user.GivenName, user.FamilyName);
+
+            // Assert.
+            Assert.Equal(user.Username, response.Username);
+            Assert.Equal(user.GivenName, response.GivenName);
+            Assert.Equal(user.FamilyName, response.FamilyName);
+            Assert.Equal(user.Email, response.Email);
+            Assert.NotNull(user.LastLoginAt);
+            Assert.True(user.IsActive);
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var validationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Value.Secret)),
+                ValidateIssuer = false,
+                ValidateAudience = false
+            };
+            tokenHandler.ValidateToken(response.Token, validationParameters, out _);
+        }
+
+        /// <summary>
+        /// Tests external user authentication when user doesn't exists.
+        /// It should create and authenticate a user.
+        /// </summary>
+        /// <returns>The task.</returns>
+        [Fact]
+        public async Task AuthenticateExternalAsync_UserDoesNotExist_AuthenticatesUser()
+        {
+            // Arrange.
+            var externalId = Guid.NewGuid().ToString();
+            var externalIdentityProvider = Guid.NewGuid().ToString();
+            const string email = "test@example.com";
+            const string givenName = "Test given name";
+            const string familyName = "Test family name";
+
+            // Act.
+            var response = await _service.AuthenticateExternalAsync(externalIdentityProvider, externalId, email,
+                givenName, familyName);
+
+            // Assert.
+            Assert.Equal(externalId + "|" + externalIdentityProvider, response.Username);
+            Assert.Equal(givenName, response.GivenName);
+            Assert.Equal(familyName, response.FamilyName);
+            Assert.Equal(email, response.Email);
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var validationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Value.Secret)),
+                ValidateIssuer = false,
+                ValidateAudience = false
+            };
+            tokenHandler.ValidateToken(response.Token, validationParameters, out _);
+        }
+
+        #endregion
+
         #region GetAllAsync
 
         /// <summary>
@@ -848,6 +925,132 @@ namespace WebApi.Test.Tests.Services
 
             // Assert.
             await Assert.ThrowsAsync<EmailNotSentException>(Act);
+        }
+
+        /// <summary>
+        /// Tests updating username of external user.
+        /// It should throw <see cref="UpdateReadOnlyPropertyException" />.
+        /// </summary>
+        /// <returns>The task.</returns>
+        [Fact]
+        public async Task UpdateAsync_UpdateUsernameOfExternalUser_UpdateReadOnlyPropertyException()
+        {
+            // Arrange.
+            var user = _factory.CreateUsers(1, "AbcAbc123")[0];
+            user.ExternalId = "test";
+            user.ExternalIdentityProvider = "test";
+            await _db.SaveChangesAsync();
+            var dto = new DTO.UpdateAsync.RequestDto
+            {
+                Username = new UpdateStringField {NewValue = Guid.NewGuid().ToString()}
+            };
+
+            // Act.
+            Task Act() => _service.UpdateAsync(user.Id, user.Id, dto);
+
+            // Assert.
+            await Assert.ThrowsAsync<UpdateReadOnlyPropertyException>(Act);
+        }
+
+        /// <summary>
+        /// Tests updating given name of external user.
+        /// It should throw <see cref="UpdateReadOnlyPropertyException" />.
+        /// </summary>
+        /// <returns>The task.</returns>
+        [Fact]
+        public async Task UpdateAsync_UpdateGivenNameOfExternalUser_UpdateReadOnlyPropertyException()
+        {
+            // Arrange.
+            var user = _factory.CreateUsers(1, "AbcAbc123")[0];
+            user.ExternalId = "test";
+            user.ExternalIdentityProvider = "test";
+            await _db.SaveChangesAsync();
+            var dto = new DTO.UpdateAsync.RequestDto
+            {
+                GivenName = new UpdateStringField {NewValue = Guid.NewGuid().ToString()}
+            };
+
+            // Act.
+            Task Act() => _service.UpdateAsync(user.Id, user.Id, dto);
+
+            // Assert.
+            await Assert.ThrowsAsync<UpdateReadOnlyPropertyException>(Act);
+        }
+
+        /// <summary>
+        /// Tests updating family name of external user.
+        /// It should throw <see cref="UpdateReadOnlyPropertyException" />.
+        /// </summary>
+        /// <returns>The task.</returns>
+        [Fact]
+        public async Task UpdateAsync_UpdateFamilyNameOfExternalUser_UpdateReadOnlyPropertyException()
+        {
+            // Arrange.
+            var user = _factory.CreateUsers(1, "AbcAbc123")[0];
+            user.ExternalId = "test";
+            user.ExternalIdentityProvider = "test";
+            await _db.SaveChangesAsync();
+            var dto = new DTO.UpdateAsync.RequestDto
+            {
+                FamilyName = new UpdateStringField {NewValue = Guid.NewGuid().ToString()}
+            };
+
+            // Act.
+            Task Act() => _service.UpdateAsync(user.Id, user.Id, dto);
+
+            // Assert.
+            await Assert.ThrowsAsync<UpdateReadOnlyPropertyException>(Act);
+        }
+
+        /// <summary>
+        /// Tests updating password of external user.
+        /// It should throw <see cref="UpdateReadOnlyPropertyException" />.
+        /// </summary>
+        /// <returns>The task.</returns>
+        [Fact]
+        public async Task UpdateAsync_UpdatePasswordOfExternalUser_UpdateReadOnlyPropertyException()
+        {
+            // Arrange.
+            var user = _factory.CreateUsers(1, "AbcAbc123")[0];
+            user.ExternalId = "test";
+            user.ExternalIdentityProvider = "test";
+            await _db.SaveChangesAsync();
+            var dto = new DTO.UpdateAsync.RequestDto
+            {
+                Password = new UpdateStringField {NewValue = Guid.NewGuid().ToString()}
+            };
+
+            // Act.
+            Task Act() => _service.UpdateAsync(user.Id, user.Id, dto);
+
+            // Assert.
+            await Assert.ThrowsAsync<UpdateReadOnlyPropertyException>(Act);
+        }
+
+
+        /// <summary>
+        /// Tests updating email of external user.
+        /// It should throw <see cref="UpdateReadOnlyPropertyException" />.
+        /// </summary>
+        /// <returns>The task.</returns>
+        [Fact]
+        public async Task UpdateAsync_UpdateEmailOfExternalUser_UpdateReadOnlyPropertyException()
+        {
+            // Arrange.
+            var user = _factory.CreateUsers(1, "AbcAbc123")[0];
+            user.ExternalId = "test";
+            user.ExternalIdentityProvider = "test";
+            await _db.SaveChangesAsync();
+            var dto = new DTO.UpdateAsync.RequestDto
+            {
+                Email = new UpdateStringField {NewValue = Guid.NewGuid().ToString() + "@example.com"}
+            };
+
+            // Act.
+            Task Act() => _service.UpdateAsync(user.Id, user.Id, dto);
+
+            // Assert.
+            await Assert.ThrowsAsync<UpdateReadOnlyPropertyException>(Act);
         }
 
         #endregion
