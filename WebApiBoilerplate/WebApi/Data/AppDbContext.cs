@@ -60,35 +60,44 @@ namespace WebApi.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Build models.
             modelBuilder.Entity<User>(b =>
             {
-                b.HasKey(x => x.Id);
+                // Property.
                 b.Property(x => x.Id).ValueGeneratedNever();
-                b.HasIndex(x => x.Username);
                 b.Property(x => x.Username).IsRequired().HasMaxLength(255);
                 b.Property(x => x.GivenName).HasMaxLength(30);
                 b.Property(x => x.FamilyName).HasMaxLength(30);
                 b.Property(x => x.Email).HasMaxLength(320);
                 b.Property(x => x.CreatedAt).IsRequired();
+
+                // Index.
+                b.HasKey(x => x.Id);
+                b.HasIndex(x => x.Username);
                 b.HasIndex(x => x.IsActive);
                 b.HasIndex(x => x.RoleId);
-                b.HasOne(x => x.Role).WithMany(y => y.Users).HasForeignKey(z => z.RoleId);
                 b.HasIndex(x => x.CreatedById);
-                b.HasOne(x => x.CreatedBy).WithMany(x => x.CreatedUsers).HasForeignKey(x => x.CreatedById);
                 b.HasIndex(x => x.UpdatedById);
+
+                // Relation.
+                b.HasOne(x => x.Role).WithMany(y => y.Users).HasForeignKey(z => z.RoleId);
+                b.HasOne(x => x.CreatedBy).WithMany(x => x.CreatedUsers).HasForeignKey(x => x.CreatedById);
                 b.HasOne(x => x.UpdatedBy).WithMany(x => x.UpdatedUsers).HasForeignKey(x => x.UpdatedById);
             });
 
             modelBuilder.Entity<Role>(b =>
             {
-                b.HasKey(x => x.Id);
+                // Property.
                 b.Property(x => x.Id).ValueGeneratedNever();
-                b.HasIndex(x => x.Name).IsUnique();
                 b.Property(x => x.Name).IsRequired().HasMaxLength(64);
+
+                // Index.
+                b.HasKey(x => x.Id);
+                b.HasIndex(x => x.Name).IsUnique();
                 b.HasIndex(x => x.CreatedById);
-                b.HasOne(x => x.CreatedBy).WithMany(x => x.CreatedRoles).HasForeignKey(x => x.CreatedById);
                 b.HasIndex(x => x.UpdatedById);
+
+                // Relation.
+                b.HasOne(x => x.CreatedBy).WithMany(x => x.CreatedRoles).HasForeignKey(x => x.CreatedById);
                 b.HasOne(x => x.UpdatedBy).WithMany(x => x.UpdatedRoles).HasForeignKey(x => x.UpdatedById);
             });
         }
