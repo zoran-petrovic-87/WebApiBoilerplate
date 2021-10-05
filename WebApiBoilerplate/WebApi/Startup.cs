@@ -27,9 +27,9 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using WebApi.Data;
 using WebApi.Helpers;
-using WebApi.IServices;
 using WebApi.Models;
 using WebApi.Services;
+using WebApi.Services.Interfaces;
 using Role = WebApi.Models.Role;
 
 namespace WebApi

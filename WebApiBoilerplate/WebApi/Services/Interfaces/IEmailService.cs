@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace WebApi.IServices
+namespace WebApi.Services.Interfaces
 {
     /// <summary>
     /// The email service interface.

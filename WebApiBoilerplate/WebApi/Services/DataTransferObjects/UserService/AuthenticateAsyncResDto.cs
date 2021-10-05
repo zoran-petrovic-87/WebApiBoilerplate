@@ -1,5 +1,5 @@
 using System;
-using WebApi.IServices;
+using WebApi.Services.Interfaces;
 
 namespace WebApi.Services.DataTransferObjects.UserService
 {

@@ -11,11 +11,11 @@ using WebApi.Data;
 using WebApi.Helpers;
 using WebApi.Helpers.Exceptions;
 using WebApi.Helpers.Pagination;
-using WebApi.IServices;
 using WebApi.Resources.Localization;
 using WebApi.Services;
 using WebApi.Services.DataTransferObjects;
 using WebApi.Services.DataTransferObjects.UserService;
+using WebApi.Services.Interfaces;
 using WebApi.Test.Helpers;
 using Xunit;
 

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using WebApi.Helpers.Pagination;
 using WebApi.Services.DataTransferObjects.UserService;
 
-namespace WebApi.IServices
+namespace WebApi.Services.Interfaces
 {
     /// <summary>
     /// The user service interface.

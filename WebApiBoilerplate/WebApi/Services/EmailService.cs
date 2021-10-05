@@ -5,14 +5,14 @@ using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using WebApi.Helpers;
-using WebApi.IServices;
+using WebApi.Services.Interfaces;
 
 namespace WebApi.Services
 {
     /// <summary>
     /// The email service.
     /// </summary>
-    /// <seealso cref="WebApi.IServices.IEmailService" />
+    /// <seealso cref="IEmailService" />
     public class EmailService : IEmailService
     {
         private readonly ILogger<EmailService> _logger;

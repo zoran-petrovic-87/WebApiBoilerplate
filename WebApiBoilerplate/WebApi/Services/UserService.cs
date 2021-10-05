@@ -17,17 +17,17 @@ using WebApi.Data;
 using WebApi.Helpers;
 using WebApi.Helpers.Exceptions;
 using WebApi.Helpers.Pagination;
-using WebApi.IServices;
 using WebApi.Models;
 using WebApi.Resources.Localization;
 using WebApi.Services.DataTransferObjects.UserService;
+using WebApi.Services.Interfaces;
 
 namespace WebApi.Services
 {
     /// <summary>
     /// The user service.
     /// </summary>
-    /// <seealso cref="WebApi.IServices.IUserService" />
+    /// <seealso cref="IUserService" />
     public class UserService : IUserService
     {
         private readonly ILogger<UserService> _logger;

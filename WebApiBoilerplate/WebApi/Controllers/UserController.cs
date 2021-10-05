@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using WebApi.Helpers;
 using WebApi.Helpers.Exceptions;
 using WebApi.Helpers.Pagination;
-using WebApi.IServices;
 using WebApi.Services.DataTransferObjects.UserService;
+using WebApi.Services.Interfaces;
 
 namespace WebApi.Controllers
 {
