@@ -80,8 +80,7 @@ Flow goes like this:
 * We create our own token and send it back to user  
 
 ## Note
-I will not use _Identity_ system as it introduces too much complexity for simple projects and for people starting with ASP.NET.  
-*I am working on different boilerplate for complex projects that will use Identity with IdentityServer4.*
+I did not use _Identity_ system as it introduces too much complexity for small or medium sized projects and for people starting with ASP.NET.  
 
 ## License
 MIT
