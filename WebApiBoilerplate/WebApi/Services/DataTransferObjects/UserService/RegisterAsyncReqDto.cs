@@ -1,9 +1,11 @@
-namespace WebApi.Controllers.DataTransferObjects.User.RegisterAsync
+using WebApi.IServices;
+
+namespace WebApi.Services.DataTransferObjects.UserService
 {
     /// <summary>
-    /// Data transfer object for the "Register" user request.
+    /// Data transfer object for the <see cref="IUserService.RegisterAsync"/> request.
     /// </summary>
-    public class RequestDto
+    public class RegisterAsyncReqDto
     {
         /// <summary>
         /// Gets or sets the username.

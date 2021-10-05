@@ -1,4 +1,4 @@
-﻿namespace WebApi.Controllers.DataTransferObjects
+﻿namespace WebApi.Services.DataTransferObjects
 {
     /// <summary>
     /// Class used in data transfer objects for updating string fields.

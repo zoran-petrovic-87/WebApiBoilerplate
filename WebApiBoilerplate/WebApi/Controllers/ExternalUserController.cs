@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.IServices;
-using DtoAuth = WebApi.Controllers.DataTransferObjects.User.AuthenticateAsync;
+using WebApi.Services.DataTransferObjects.UserService;
 
 namespace WebApi.Controllers
 {
@@ -46,7 +46,7 @@ namespace WebApi.Controllers
         /// <returns>The authentication token.</returns>
         [Authorize(AuthenticationSchemes = "oidc-google")]
         [HttpGet("loginWithGoogleToken")]
-        public async Task<ActionResult<DtoAuth.ResponseDto>> LoginWithGoogleToken()
+        public async Task<ActionResult<AuthenticateAsyncResDto>> LoginWithGoogleToken()
         {
             if (!User.Identity.IsAuthenticated) return BadRequest();
 

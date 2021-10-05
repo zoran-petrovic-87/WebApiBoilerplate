@@ -1,9 +1,11 @@
-namespace WebApi.Controllers.DataTransferObjects.User.PasswordResetAsync
+using WebApi.IServices;
+
+namespace WebApi.Services.DataTransferObjects.UserService
 {
     /// <summary>
-    /// Data transfer object for the "PasswordReset" request.
+    /// Data transfer object for the <see cref="IUserService.PasswordResetAsync"/> request.
     /// </summary>
-    public class RequestDto
+    public class PasswordResetAsyncReqDto
     {
         /// <summary>
         /// Gets or sets the email.

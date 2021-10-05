@@ -1,13 +1,14 @@
 using System;
+using WebApi.IServices;
 
 // ReSharper disable MemberCanBePrivate.Global
 
-namespace WebApi.Controllers.DataTransferObjects.User.GetDetailsAsync
+namespace WebApi.Services.DataTransferObjects.UserService
 {
     /// <summary>
-    /// Data transfer object for the "GetDetails" response.
+    /// Data transfer object for the <see cref="IUserService.GetDetailsAsync"/> response.
     /// </summary>
-    public class ResponseDto
+    public class GetDetailsAsyncResDto
     {
         /// <summary>
         /// Gets or sets the identifier.
@@ -55,7 +56,7 @@ namespace WebApi.Controllers.DataTransferObjects.User.GetDetailsAsync
         /// <value>
         /// The role data transfer object.
         /// </value>
-        public Role.GetAllAsync.ResponseDto Role { get; set; }
+        public RoleResDto Role { get; set; }
 
         /// <summary>
         /// Gets or sets the date when this user was created.

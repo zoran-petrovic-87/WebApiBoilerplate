@@ -2,18 +2,18 @@ using FluentValidation;
 using Microsoft.Extensions.Localization;
 using WebApi.Resources.Localization;
 
-namespace WebApi.Controllers.DataTransferObjects.User.RegisterAsync
+namespace WebApi.Services.DataTransferObjects.UserService
 {
     /// <summary>
-    /// Validator for the <seealso cref="RequestDto" />.
+    /// Validator for the <see cref="RegisterAsyncReqDto" />.
     /// </summary>
-    public class RequestDtoValidator : AbstractValidator<RequestDto>
+    public class RegisterAsyncReqDtoValidator : AbstractValidator<RegisterAsyncReqDto>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="RequestDtoValidator"/> class.
+        /// Initializes a new instance of the <see cref="RegisterAsyncReqDtoValidator"/> class.
         /// </summary>
         /// <param name="l">The localizer.</param>
-        public RequestDtoValidator(IStringLocalizer<Translation> l)
+        public RegisterAsyncReqDtoValidator(IStringLocalizer<Translation> l)
         {
             RuleFor(x => x.Username).Username(l);
             RuleFor(x => x.GivenName).GivenName(l);

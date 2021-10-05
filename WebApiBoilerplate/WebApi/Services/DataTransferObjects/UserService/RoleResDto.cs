@@ -1,11 +1,12 @@
 using System;
+using WebApi.Models;
 
-namespace WebApi.Controllers.DataTransferObjects.Role.GetAllAsync
+namespace WebApi.Services.DataTransferObjects.UserService
 {
     /// <summary>
-    /// Data transfer object for the role "GetAll" response.
+    /// Data transfer object for the <see cref="Role"/> response.
     /// </summary>
-    public class ResponseDto
+    public class RoleResDto
     {
         /// <summary>
         /// Gets or sets the identifier.

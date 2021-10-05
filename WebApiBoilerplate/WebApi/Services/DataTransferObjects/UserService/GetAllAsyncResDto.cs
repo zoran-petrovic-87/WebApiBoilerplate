@@ -1,13 +1,14 @@
 using System;
+using WebApi.IServices;
 
 // ReSharper disable MemberCanBePrivate.Global
 
-namespace WebApi.Controllers.DataTransferObjects.User.GetAll
+namespace WebApi.Services.DataTransferObjects.UserService
 {
     /// <summary>
-    /// Data transfer object for the "GetAll" response.
+    /// Data transfer object for the <see cref="IUserService.GetAllAsync"/> response.
     /// </summary>
-    public class ResponseDto
+    public class GetAllAsyncResDto
     {
         /// <summary>
         /// Gets or sets the identifier.
@@ -55,6 +56,6 @@ namespace WebApi.Controllers.DataTransferObjects.User.GetAll
         /// <value>
         /// The role data transfer object.
         /// </value>
-        public Role.GetAllAsync.ResponseDto Role { get; set; }
+        public RoleResDto Role { get; set; }
     }
 }

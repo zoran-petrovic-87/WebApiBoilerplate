@@ -1,27 +1,19 @@
-using System;
+using WebApi.IServices;
 
-namespace WebApi.Controllers.DataTransferObjects.User.AuthenticateAsync
+namespace WebApi.Services.DataTransferObjects.UserService
 {
     /// <summary>
-    /// Data transfer object for the "Authenticate" response.
+    /// Data transfer object for the <see cref="IUserService.UpdateAsync"/> request.
     /// </summary>
-    public class ResponseDto
+    public class UpdateAsyncReqDto
     {
-        /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        public Guid Id { get; set; }
-
         /// <summary>
         /// Gets or sets the username.
         /// </summary>
         /// <value>
         /// The username.
         /// </value>
-        public string Username { get; set; }
+        public UpdateStringField Username { get; set; }
 
         /// <summary>
         /// Gets or sets the given name.
@@ -29,7 +21,7 @@ namespace WebApi.Controllers.DataTransferObjects.User.AuthenticateAsync
         /// <value>
         /// The given name.
         /// </value>
-        public string GivenName { get; set; }
+        public UpdateStringField GivenName { get; set; }
 
         /// <summary>
         /// Gets or sets the family name.
@@ -37,7 +29,7 @@ namespace WebApi.Controllers.DataTransferObjects.User.AuthenticateAsync
         /// <value>
         /// The family name.
         /// </value>
-        public string FamilyName { get; set; }
+        public UpdateStringField FamilyName { get; set; }
 
         /// <summary>
         /// Gets or sets the email.
@@ -45,14 +37,14 @@ namespace WebApi.Controllers.DataTransferObjects.User.AuthenticateAsync
         /// <value>
         /// The email.
         /// </value>
-        public string Email { get; set; }
+        public UpdateStringField Email { get; set; }
 
         /// <summary>
-        /// Gets or sets the token.
+        /// Gets or sets the password.
         /// </summary>
         /// <value>
-        /// The token.
+        /// The password.
         /// </value>
-        public string Token { get; set; }
+        public UpdateStringField Password { get; set; }
     }
 }

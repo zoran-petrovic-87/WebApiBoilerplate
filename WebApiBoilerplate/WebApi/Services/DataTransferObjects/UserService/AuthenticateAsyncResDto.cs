@@ -1,17 +1,28 @@
-namespace WebApi.Controllers.DataTransferObjects.User.UpdateAsync
+using System;
+using WebApi.IServices;
+
+namespace WebApi.Services.DataTransferObjects.UserService
 {
     /// <summary>
-    /// Data transfer object for the user "Update" request.
+    /// Data transfer object for the <see cref="IUserService.AuthenticateAsync"/> response.
     /// </summary>
-    public class RequestDto
+    public class AuthenticateAsyncResDto
     {
+        /// <summary>
+        /// Gets or sets the identifier.
+        /// </summary>
+        /// <value>
+        /// The identifier.
+        /// </value>
+        public Guid Id { get; set; }
+
         /// <summary>
         /// Gets or sets the username.
         /// </summary>
         /// <value>
         /// The username.
         /// </value>
-        public UpdateStringField Username { get; set; }
+        public string Username { get; set; }
 
         /// <summary>
         /// Gets or sets the given name.
@@ -19,7 +30,7 @@ namespace WebApi.Controllers.DataTransferObjects.User.UpdateAsync
         /// <value>
         /// The given name.
         /// </value>
-        public UpdateStringField GivenName { get; set; }
+        public string GivenName { get; set; }
 
         /// <summary>
         /// Gets or sets the family name.
@@ -27,7 +38,7 @@ namespace WebApi.Controllers.DataTransferObjects.User.UpdateAsync
         /// <value>
         /// The family name.
         /// </value>
-        public UpdateStringField FamilyName { get; set; }
+        public string FamilyName { get; set; }
 
         /// <summary>
         /// Gets or sets the email.
@@ -35,14 +46,14 @@ namespace WebApi.Controllers.DataTransferObjects.User.UpdateAsync
         /// <value>
         /// The email.
         /// </value>
-        public UpdateStringField Email { get; set; }
+        public string Email { get; set; }
 
         /// <summary>
-        /// Gets or sets the password.
+        /// Gets or sets the token.
         /// </summary>
         /// <value>
-        /// The password.
+        /// The token.
         /// </value>
-        public UpdateStringField Password { get; set; }
+        public string Token { get; set; }
     }
 }

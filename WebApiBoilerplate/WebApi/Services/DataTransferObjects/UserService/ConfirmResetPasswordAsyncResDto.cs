@@ -1,11 +1,12 @@
 using System;
+using WebApi.IServices;
 
-namespace WebApi.Controllers.DataTransferObjects.User.ConfirmResetPasswordAsync
+namespace WebApi.Services.DataTransferObjects.UserService
 {
     /// <summary>
-    /// Data transfer object for the "ConfirmResetPassword" response.
+    /// Data transfer object for the <see cref="IUserService.ConfirmResetPasswordAsync"/> response.
     /// </summary>
-    public class ResponseDto
+    public class ConfirmResetPasswordAsyncResDto
     {
         /// <summary>
         /// Gets or sets the identifier.

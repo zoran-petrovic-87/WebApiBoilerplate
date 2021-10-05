@@ -8,8 +8,7 @@ using WebApi.Helpers;
 using WebApi.Helpers.Exceptions;
 using WebApi.Helpers.Pagination;
 using WebApi.IServices;
-using Dto = WebApi.Controllers.DataTransferObjects.User;
-using DtoAuth = WebApi.Controllers.DataTransferObjects.User.AuthenticateAsync;
+using WebApi.Services.DataTransferObjects.UserService;
 
 namespace WebApi.Controllers
 {
@@ -47,7 +46,7 @@ namespace WebApi.Controllers
         [AllowAnonymous]
         [HttpPost("authenticate")]
         [ActionName(nameof(AuthenticateAsync))]
-        public async Task<ActionResult<DtoAuth.ResponseDto>> AuthenticateAsync([FromBody] DtoAuth.RequestDto dto)
+        public async Task<ActionResult<AuthenticateAsyncResDto>> AuthenticateAsync([FromBody] AuthenticateAsyncReqDto dto)
         {
             try
             {
@@ -67,7 +66,7 @@ namespace WebApi.Controllers
         [AllowAnonymous]
         [HttpPost("register")]
         [ActionName(nameof(RegisterAsync))]
-        public async Task<ActionResult> RegisterAsync([FromBody] Dto.RegisterAsync.RequestDto dto)
+        public async Task<ActionResult> RegisterAsync([FromBody] RegisterAsyncReqDto dto)
         {
             try
             {
@@ -92,7 +91,7 @@ namespace WebApi.Controllers
         [Authorize(Policy = "RequireAdminRole")]
         [HttpPost]
         [ActionName(nameof(CreateAsync))]
-        public async Task<ActionResult> CreateAsync([FromBody] Dto.RegisterAsync.RequestDto dto)
+        public async Task<ActionResult> CreateAsync([FromBody] RegisterAsyncReqDto dto)
         {
             try
             {
@@ -116,7 +115,7 @@ namespace WebApi.Controllers
         /// <returns>The paginated HTTP response with list of users.</returns>
         [HttpGet]
         [ActionName(nameof(GetAllAsync))]
-        public async Task<ActionResult<PagedResult<Dto.GetAll.ResponseDto>>> GetAllAsync(
+        public async Task<ActionResult<PagedResult<GetAllAsyncResDto>>> GetAllAsync(
             [FromQuery] PaginationFilter paginationFilter)
         {
             return Ok(await _userService.GetAllAsync(paginationFilter));
@@ -129,7 +128,7 @@ namespace WebApi.Controllers
         /// <returns>The user details.</returns>
         [HttpGet("{id}")]
         [ActionName(nameof(GetDetailsAsync))]
-        public async Task<ActionResult<Dto.GetDetailsAsync.ResponseDto>> GetDetailsAsync(Guid id)
+        public async Task<ActionResult<GetDetailsAsyncResDto>> GetDetailsAsync(Guid id)
         {
             try
             {
@@ -153,7 +152,7 @@ namespace WebApi.Controllers
         /// <returns>HTTP response indicating if this request was successful or not.</returns>
         [HttpPatch("{id}")]
         [ActionName(nameof(UpdateAsync))]
-        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] Dto.UpdateAsync.RequestDto dto)
+        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] UpdateAsyncReqDto dto)
         {
             try
             {
@@ -223,7 +222,7 @@ namespace WebApi.Controllers
         [AllowAnonymous]
         [HttpPost("PasswordReset")]
         [ActionName(nameof(PasswordResetAsync))]
-        public async Task<ActionResult> PasswordResetAsync([FromBody] Dto.PasswordResetAsync.RequestDto dto)
+        public async Task<ActionResult> PasswordResetAsync([FromBody] PasswordResetAsyncReqDto dto)
         {
             try
             {
