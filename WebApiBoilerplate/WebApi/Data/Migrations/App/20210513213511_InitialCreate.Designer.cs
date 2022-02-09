@@ -13,6 +13,10 @@ namespace WebApi.Data.Migrations.App
     [Migration("20210513213511_InitialCreate")]
     partial class InitialCreate
     {
+        /// <summary>
+        /// Builds a target model.
+        /// </summary>
+        /// <param name="modelBuilder">The model builder.</param>
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618

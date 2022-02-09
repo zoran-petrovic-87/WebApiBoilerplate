@@ -1,5 +1,5 @@
 # Boilerplate project for ASP.NET Core WebAPI
-for .NET Core 5
+for .NET Core 6
 
 ## Why?
 To save time. There are other boilerplates on GitHub but they are huge and they became framework on top of the framework.  

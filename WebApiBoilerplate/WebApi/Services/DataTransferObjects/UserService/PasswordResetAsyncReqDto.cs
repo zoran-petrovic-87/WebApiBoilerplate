@@ -1,18 +1,17 @@
 using WebApi.Services.Interfaces;
 
-namespace WebApi.Services.DataTransferObjects.UserService
+namespace WebApi.Services.DataTransferObjects.UserService;
+
+/// <summary>
+/// Data transfer object for the <see cref="IUserService.PasswordResetAsync"/> request.
+/// </summary>
+public class PasswordResetAsyncReqDto
 {
     /// <summary>
-    /// Data transfer object for the <see cref="IUserService.PasswordResetAsync"/> request.
+    /// Gets or sets the email.
     /// </summary>
-    public class PasswordResetAsyncReqDto
-    {
-        /// <summary>
-        /// Gets or sets the email.
-        /// </summary>
-        /// <value>
-        /// The email.
-        /// </value>
-        public string Email { get; set; }
-    }
+    /// <value>
+    /// The email.
+    /// </value>
+    public string Email { get; set; }
 }
