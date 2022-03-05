@@ -13,9 +13,9 @@ public interface IUserService
     /// <summary>
     /// Authenticates the specified user.
     /// </summary>
-    /// <param name="dto">The <see cref="AuthenticateAsyncReqDto"/> data transfer object.</param>
+    /// <param name="dto">The <see cref="AuthenticateReqDto"/> data transfer object.</param>
     /// <returns>The user info with token.</returns>
-    Task<AuthenticateAsyncResDto> AuthenticateAsync(AuthenticateAsyncReqDto dto);
+    Task<AuthenticateResDto> AuthenticateAsync(AuthenticateReqDto dto);
 
     /// <summary>
     /// Authenticates the external user.
@@ -26,46 +26,46 @@ public interface IUserService
     /// <param name="givenName">The given name.</param>
     /// <param name="familyName">The family name.</param>
     /// <returns>The user info with token.</returns>
-    Task<AuthenticateAsyncResDto> AuthenticateExternalAsync(string externalIdentityProvider,
+    Task<AuthenticateResDto> AuthenticateExternalAsync(string externalIdentityProvider,
         string externalId, string email, string givenName, string familyName);
 
     /// <summary>
     /// Registers the new user.
     /// </summary>
-    /// <param name="dto">The <see cref="RegisterAsyncReqDto"/> data transfer object.</param>
+    /// <param name="dto">The <see cref="RegisterReqDto"/> data transfer object.</param>
     /// <returns>The user details.</returns>
-    Task<GetDetailsAsyncResDto> RegisterAsync(RegisterAsyncReqDto dto);
+    Task<GetDetailsResDto> RegisterAsync(RegisterReqDto dto);
 
     /// <summary>
     /// Creates the new user.
     /// </summary>
     /// <param name="userId">The identifier of the user that made the request.</param>
-    /// <param name="dto">The <see cref="RegisterAsyncReqDto"/> data transfer object.</param>
+    /// <param name="dto">The <see cref="RegisterReqDto"/> data transfer object.</param>
     /// <returns>The user details.</returns>
-    Task<GetDetailsAsyncResDto> CreateAsync(Guid userId, RegisterAsyncReqDto dto);
+    Task<GetDetailsResDto> CreateAsync(Guid userId, RegisterReqDto dto);
 
     /// <summary>
     /// Gets all users.
     /// </summary>
     /// <param name="paginationFilter">The pagination filter.</param>
     /// <returns>The list of users.</returns>
-    Task<PagedResult<GetAllAsyncResDto>> GetAllAsync(PaginationFilter paginationFilter);
+    Task<PagedResult<GetAllResDto>> GetAllAsync(PaginationFilter paginationFilter);
 
     /// <summary>
     /// Gets the user by identifier.
     /// </summary>
     /// <param name="id">The user identifier.</param>
     /// <returns>The user details.</returns>
-    Task<GetDetailsAsyncResDto> GetDetailsAsync(Guid id);
+    Task<GetDetailsResDto> GetDetailsAsync(Guid id);
 
     /// <summary>
     /// Updates the specified user.
     /// </summary>
     /// <param name="id">The identifier of the user that should be updated.</param>
     /// <param name="userId">The identifier of the user that made update request.</param>
-    /// <param name="dto">The <see cref="UpdateAsyncReqDto"/> data transfer object.</param>
+    /// <param name="dto">The <see cref="UpdateReqDto"/> data transfer object.</param>
     /// <returns>The user details.</returns>
-    Task<GetDetailsAsyncResDto> UpdateAsync(Guid id, Guid userId, UpdateAsyncReqDto dto);
+    Task<GetDetailsResDto> UpdateAsync(Guid id, Guid userId, UpdateReqDto dto);
 
     /// <summary>
     /// Deletes the specified user.
@@ -85,9 +85,9 @@ public interface IUserService
     /// <summary>
     /// Resets the password by sending an email to the user.
     /// </summary>
-    /// <param name="dto">The <see cref="PasswordResetAsyncReqDto"/> data transfer object.</param>
+    /// <param name="dto">The <see cref="PasswordResetReqDto"/> data transfer object.</param>
     /// <returns>Task.</returns>
-    Task PasswordResetAsync(PasswordResetAsyncReqDto dto);
+    Task PasswordResetAsync(PasswordResetReqDto dto);
 
     /// <summary>
     /// Confirms the reset password.
@@ -95,5 +95,5 @@ public interface IUserService
     /// <param name="code">The code that will be used to validate reset password request.</param>
     /// <param name="email">The email address of the user.</param>
     /// <returns>Task</returns>
-    Task<ConfirmResetPasswordAsyncResDto> ConfirmResetPasswordAsync(string code, string email);
+    Task<ConfirmResetPasswordResDto> ConfirmResetPasswordAsync(string code, string email);
 }

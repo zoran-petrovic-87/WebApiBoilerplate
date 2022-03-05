@@ -4,9 +4,9 @@ using WebApi.Services.Interfaces;
 namespace WebApi.Services.DataTransferObjects.UserService;
 
 /// <summary>
-/// Data transfer object for the <see cref="IUserService.AuthenticateAsync"/> response.
+/// Data transfer object for the <see cref="IUserService.ConfirmResetPasswordAsync"/> response.
 /// </summary>
-public class AuthenticateAsyncResDto
+public class ConfirmResetPasswordResDto
 {
     /// <summary>
     /// Gets or sets the identifier.
@@ -25,22 +25,6 @@ public class AuthenticateAsyncResDto
     public string Username { get; set; }
 
     /// <summary>
-    /// Gets or sets the given name.
-    /// </summary>
-    /// <value>
-    /// The given name.
-    /// </value>
-    public string GivenName { get; set; }
-
-    /// <summary>
-    /// Gets or sets the family name.
-    /// </summary>
-    /// <value>
-    /// The family name.
-    /// </value>
-    public string FamilyName { get; set; }
-
-    /// <summary>
     /// Gets or sets the email.
     /// </summary>
     /// <value>
@@ -49,10 +33,10 @@ public class AuthenticateAsyncResDto
     public string Email { get; set; }
 
     /// <summary>
-    /// Gets or sets the token.
+    /// Gets or sets the password.
     /// </summary>
     /// <value>
-    /// The token.
+    /// The password.
     /// </value>
-    public string Token { get; set; }
+    public string Password { get; set; }
 }

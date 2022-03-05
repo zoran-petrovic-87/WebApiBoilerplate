@@ -1,12 +1,21 @@
+using System;
 using WebApi.Services.Interfaces;
 
 namespace WebApi.Services.DataTransferObjects.UserService;
 
 /// <summary>
-/// Data transfer object for the <see cref="IUserService.RegisterAsync"/> request.
+/// Data transfer object for the <see cref="IUserService.AuthenticateAsync"/> response.
 /// </summary>
-public class RegisterAsyncReqDto
+public class AuthenticateResDto
 {
+    /// <summary>
+    /// Gets or sets the identifier.
+    /// </summary>
+    /// <value>
+    /// The identifier.
+    /// </value>
+    public Guid Id { get; set; }
+
     /// <summary>
     /// Gets or sets the username.
     /// </summary>
@@ -40,10 +49,10 @@ public class RegisterAsyncReqDto
     public string Email { get; set; }
 
     /// <summary>
-    /// Gets or sets the password.
+    /// Gets or sets the token.
     /// </summary>
     /// <value>
-    /// The password.
+    /// The token.
     /// </value>
-    public string Password { get; set; }
+    public string Token { get; set; }
 }

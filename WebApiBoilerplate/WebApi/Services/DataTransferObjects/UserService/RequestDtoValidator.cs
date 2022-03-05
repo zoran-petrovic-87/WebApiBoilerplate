@@ -5,9 +5,9 @@ using WebApi.Resources.Localization;
 namespace WebApi.Services.DataTransferObjects.UserService;
 
 /// <summary>
-/// Validator for the <see cref="UpdateAsyncReqDto" />.
+/// Validator for the <see cref="UpdateReqDto" />.
 /// </summary>
-public class UpdateAsyncReqDtoValidator : AbstractValidator<UpdateAsyncReqDto>
+public class UpdateAsyncReqDtoValidator : AbstractValidator<UpdateReqDto>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="UpdateAsyncReqDtoValidator"/> class.

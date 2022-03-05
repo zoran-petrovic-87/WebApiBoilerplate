@@ -46,7 +46,7 @@ public class UserController : ControllerBase
     [AllowAnonymous]
     [HttpPost("authenticate")]
     [ActionName(nameof(AuthenticateAsync))]
-    public async Task<ActionResult<AuthenticateAsyncResDto>> AuthenticateAsync([FromBody] AuthenticateAsyncReqDto dto)
+    public async Task<ActionResult<AuthenticateResDto>> AuthenticateAsync([FromBody] AuthenticateReqDto dto)
     {
         try
         {
@@ -66,7 +66,7 @@ public class UserController : ControllerBase
     [AllowAnonymous]
     [HttpPost("register")]
     [ActionName(nameof(RegisterAsync))]
-    public async Task<ActionResult> RegisterAsync([FromBody] RegisterAsyncReqDto dto)
+    public async Task<ActionResult> RegisterAsync([FromBody] RegisterReqDto dto)
     {
         try
         {
@@ -91,7 +91,7 @@ public class UserController : ControllerBase
     [Authorize(Policy = "RequireAdminRole")]
     [HttpPost]
     [ActionName(nameof(CreateAsync))]
-    public async Task<ActionResult> CreateAsync([FromBody] RegisterAsyncReqDto dto)
+    public async Task<ActionResult> CreateAsync([FromBody] RegisterReqDto dto)
     {
         try
         {
@@ -115,7 +115,7 @@ public class UserController : ControllerBase
     /// <returns>The paginated HTTP response with list of users.</returns>
     [HttpGet]
     [ActionName(nameof(GetAllAsync))]
-    public async Task<ActionResult<PagedResult<GetAllAsyncResDto>>> GetAllAsync(
+    public async Task<ActionResult<PagedResult<GetAllResDto>>> GetAllAsync(
         [FromQuery] PaginationFilter paginationFilter)
     {
         return Ok(await _userService.GetAllAsync(paginationFilter));
@@ -128,7 +128,7 @@ public class UserController : ControllerBase
     /// <returns>The user details.</returns>
     [HttpGet("{id}")]
     [ActionName(nameof(GetDetailsAsync))]
-    public async Task<ActionResult<GetDetailsAsyncResDto>> GetDetailsAsync(Guid id)
+    public async Task<ActionResult<GetDetailsResDto>> GetDetailsAsync(Guid id)
     {
         try
         {
@@ -152,7 +152,7 @@ public class UserController : ControllerBase
     /// <returns>HTTP response indicating if this request was successful or not.</returns>
     [HttpPatch("{id}")]
     [ActionName(nameof(UpdateAsync))]
-    public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] UpdateAsyncReqDto dto)
+    public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] UpdateReqDto dto)
     {
         try
         {
@@ -222,7 +222,7 @@ public class UserController : ControllerBase
     [AllowAnonymous]
     [HttpPost("PasswordReset")]
     [ActionName(nameof(PasswordResetAsync))]
-    public async Task<ActionResult> PasswordResetAsync([FromBody] PasswordResetAsyncReqDto dto)
+    public async Task<ActionResult> PasswordResetAsync([FromBody] PasswordResetReqDto dto)
     {
         try
         {

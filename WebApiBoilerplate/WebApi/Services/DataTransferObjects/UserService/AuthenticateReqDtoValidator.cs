@@ -5,15 +5,15 @@ using WebApi.Resources.Localization;
 namespace WebApi.Services.DataTransferObjects.UserService;
 
 /// <summary>
-/// Validator for the <see cref="AuthenticateAsyncReqDto" />.
+/// Validator for the <see cref="AuthenticateReqDto" />.
 /// </summary>
-public class AuthenticateAsyncReqDtoValidator : AbstractValidator<AuthenticateAsyncReqDto>
+public class AuthenticateReqDtoValidator : AbstractValidator<AuthenticateReqDto>
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="AuthenticateAsyncReqDtoValidator"/> class.
+    /// Initializes a new instance of the <see cref="AuthenticateReqDtoValidator"/> class.
     /// </summary>
     /// <param name="l">The localizer.</param>
-    public AuthenticateAsyncReqDtoValidator(IStringLocalizer<Translation> l)
+    public AuthenticateReqDtoValidator(IStringLocalizer<Translation> l)
     {
         RuleFor(x => x.Username).Username(l);
         RuleFor(x => x.Password).Password(l);

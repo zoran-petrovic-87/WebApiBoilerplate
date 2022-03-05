@@ -64,7 +64,7 @@ public class UserService : IUserService
     }
 
     /// <inheritdoc />
-    public async Task<AuthenticateAsyncResDto> AuthenticateAsync(AuthenticateAsyncReqDto dto)
+    public async Task<AuthenticateResDto> AuthenticateAsync(AuthenticateReqDto dto)
     {
         var user = await _db.Users.SingleOrDefaultAsync(x => x.Username == dto.Username && x.IsActive);
 
@@ -102,7 +102,7 @@ public class UserService : IUserService
         user.LastLoginAt = DateTime.UtcNow;
         await _db.SaveChangesAsync();
 
-        return new AuthenticateAsyncResDto
+        return new AuthenticateResDto
         {
             Id = user.Id,
             Username = user.Username,
@@ -114,7 +114,7 @@ public class UserService : IUserService
     }
 
     /// <inheritdoc />
-    public async Task<AuthenticateAsyncResDto> AuthenticateExternalAsync(string externalIdentityProvider,
+    public async Task<AuthenticateResDto> AuthenticateExternalAsync(string externalIdentityProvider,
         string externalId, string email, string givenName, string familyName)
     {
         var user = await _db.Users.SingleOrDefaultAsync(x =>
@@ -147,7 +147,7 @@ public class UserService : IUserService
         user.LastLoginAt = now;
         await _db.SaveChangesAsync();
 
-        return new AuthenticateAsyncResDto
+        return new AuthenticateResDto
         {
             Id = user.Id,
             Username = user.Username,
@@ -159,7 +159,7 @@ public class UserService : IUserService
     }
 
     /// <inheritdoc />
-    public async Task<GetDetailsAsyncResDto> RegisterAsync(RegisterAsyncReqDto dto)
+    public async Task<GetDetailsResDto> RegisterAsync(RegisterReqDto dto)
     {
         if (string.IsNullOrWhiteSpace(dto.Password))
             throw new InvalidPasswordException(_l["Password is required."]);
@@ -194,7 +194,7 @@ public class UserService : IUserService
         await _db.Users.AddAsync(user);
         await _db.SaveChangesAsync();
 
-        return new GetDetailsAsyncResDto
+        return new GetDetailsResDto
         {
             Id = user.Id,
             Username = user.Username,
@@ -209,7 +209,7 @@ public class UserService : IUserService
     }
 
     /// <inheritdoc />
-    public async Task<GetDetailsAsyncResDto> CreateAsync(Guid userId, RegisterAsyncReqDto dto)
+    public async Task<GetDetailsResDto> CreateAsync(Guid userId, RegisterReqDto dto)
     {
         if (string.IsNullOrWhiteSpace(dto.Password))
             throw new InvalidPasswordException(_l["Password is required."]);
@@ -242,7 +242,7 @@ public class UserService : IUserService
         await _db.Users.AddAsync(user);
         await _db.SaveChangesAsync();
 
-        return new GetDetailsAsyncResDto
+        return new GetDetailsResDto
         {
             Id = user.Id,
             Username = user.Username,
@@ -257,12 +257,12 @@ public class UserService : IUserService
     }
 
     /// <inheritdoc />
-    public async Task<PagedResult<GetAllAsyncResDto>> GetAllAsync(PaginationFilter paginationFilter)
+    public async Task<PagedResult<GetAllResDto>> GetAllAsync(PaginationFilter paginationFilter)
     {
         return await _db.Users.AsNoTracking()
             .Include(x => x.Role)
             .Where(x => x.IsActive)
-            .Select(x => new GetAllAsyncResDto
+            .Select(x => new GetAllResDto
             {
                 Id = x.Id,
                 FirstName = x.GivenName,
@@ -277,12 +277,12 @@ public class UserService : IUserService
     }
 
     /// <inheritdoc />
-    public async Task<GetDetailsAsyncResDto> GetDetailsAsync(Guid id)
+    public async Task<GetDetailsResDto> GetDetailsAsync(Guid id)
     {
         var user = await _db.Users.AsNoTracking()
             .Include(x => x.Role)
             .Where(x => x.Id == id)
-            .Select(x => new GetDetailsAsyncResDto
+            .Select(x => new GetDetailsResDto
             {
                 Id = x.Id,
                 Username = x.Username,
@@ -306,8 +306,8 @@ public class UserService : IUserService
     }
 
     /// <inheritdoc />
-    public async Task<GetDetailsAsyncResDto> UpdateAsync(Guid id, Guid userId,
-        UpdateAsyncReqDto dto)
+    public async Task<GetDetailsResDto> UpdateAsync(Guid id, Guid userId,
+        UpdateReqDto dto)
     {
         if (userId != id) throw new ForbiddenException();
 
@@ -361,7 +361,7 @@ public class UserService : IUserService
 
         await _db.SaveChangesAsync();
 
-        return new GetDetailsAsyncResDto
+        return new GetDetailsResDto
         {
             Id = user.Id,
             Username = user.Username,
@@ -415,7 +415,7 @@ public class UserService : IUserService
     }
 
     /// <inheritdoc />
-    public async Task PasswordResetAsync(PasswordResetAsyncReqDto dto)
+    public async Task PasswordResetAsync(PasswordResetReqDto dto)
     {
         var user = await _db.Users.FirstOrDefaultAsync(x => x.Email == dto.Email && x.ExternalId == null);
         if (user == null)
@@ -458,7 +458,7 @@ public class UserService : IUserService
     }
 
     /// <inheritdoc />
-    public async Task<ConfirmResetPasswordAsyncResDto> ConfirmResetPasswordAsync(string code,
+    public async Task<ConfirmResetPasswordResDto> ConfirmResetPasswordAsync(string code,
         string email)
     {
         var user = await _db.Users.FirstOrDefaultAsync(x => x.Email == email && x.ResetPasswordCode == code);
@@ -476,7 +476,7 @@ public class UserService : IUserService
 
         await _db.SaveChangesAsync();
 
-        return new ConfirmResetPasswordAsyncResDto
+        return new ConfirmResetPasswordResDto
         {
             Id = user.Id,
             Username = user.Username,

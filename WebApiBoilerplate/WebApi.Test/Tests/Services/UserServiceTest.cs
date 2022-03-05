@@ -86,7 +86,7 @@ public class UserServiceTest : IDisposable
     {
         // Arrange.
         var userId = _factory.CreateUsers(1, "TestPass123!")[0].Id;
-        var dto = new RegisterAsyncReqDto
+        var dto = new RegisterReqDto
         {
             Username = "test_username",
             GivenName = "My First Name",
@@ -126,7 +126,7 @@ public class UserServiceTest : IDisposable
     public async Task CreateAsync_PasswordIsNullOrWhiteSpace_ThrowsInvalidPasswordException(string password)
     {
         // Arrange.
-        var dto = new RegisterAsyncReqDto
+        var dto = new RegisterReqDto
         {
             Username = "test_username",
             GivenName = "My First Name",
@@ -152,7 +152,7 @@ public class UserServiceTest : IDisposable
     {
         // Arrange.
         var user = _factory.CreateUsers(1, "AbcAbc123")[0];
-        var dto = new RegisterAsyncReqDto
+        var dto = new RegisterReqDto
         {
             Username = user.Username,
             GivenName = "My First Name",
@@ -178,7 +178,7 @@ public class UserServiceTest : IDisposable
     {
         // Arrange.
         var user = _factory.CreateUsers(1, "AbcAbc123")[0];
-        var dto = new RegisterAsyncReqDto
+        var dto = new RegisterReqDto
         {
             Username = "test_username",
             GivenName = "My First Name",
@@ -207,7 +207,7 @@ public class UserServiceTest : IDisposable
     public async Task RegisterAsync_WhenCalled_CreatesUser()
     {
         // Arrange.
-        var dto = new RegisterAsyncReqDto
+        var dto = new RegisterReqDto
         {
             Username = "test_username",
             GivenName = "My First Name",
@@ -247,7 +247,7 @@ public class UserServiceTest : IDisposable
     public async Task RegisterAsync_PasswordIsNullOrWhiteSpace_ThrowsInvalidPasswordException(string password)
     {
         // Arrange.
-        var dto = new RegisterAsyncReqDto
+        var dto = new RegisterReqDto
         {
             Username = "test_username",
             GivenName = "My First Name",
@@ -273,7 +273,7 @@ public class UserServiceTest : IDisposable
     {
         // Arrange.
         var user = _factory.CreateUsers(1, "AbcAbc123")[0];
-        var dto = new RegisterAsyncReqDto
+        var dto = new RegisterReqDto
         {
             Username = user.Username,
             GivenName = "My First Name",
@@ -299,7 +299,7 @@ public class UserServiceTest : IDisposable
     {
         // Arrange.
         var user = _factory.CreateUsers(1, "AbcAbc123")[0];
-        var dto = new RegisterAsyncReqDto
+        var dto = new RegisterReqDto
         {
             Username = "test_username",
             GivenName = "My First Name",
@@ -324,7 +324,7 @@ public class UserServiceTest : IDisposable
     public async Task RegisterAsync_EmailNotSent_EmailNotSentException()
     {
         // Arrange.
-        var dto = new RegisterAsyncReqDto
+        var dto = new RegisterReqDto
         {
             Username = "test_username",
             GivenName = "My First Name",
@@ -363,7 +363,7 @@ public class UserServiceTest : IDisposable
         // Arrange.
         const string password = "AbcAbc123";
         var user = _factory.CreateUsers(2, password)[0];
-        var dto = new AuthenticateAsyncReqDto
+        var dto = new AuthenticateReqDto
         {
             Username = user.Username,
             Password = password
@@ -399,7 +399,7 @@ public class UserServiceTest : IDisposable
     public async Task AuthenticateAsync_UserDoesNotExist_ThrowsEntityNotFoundException()
     {
         // Arrange.
-        var dto = new AuthenticateAsyncReqDto
+        var dto = new AuthenticateReqDto
         {
             Username = "test_username",
             Password = "AbcAbc123"
@@ -423,7 +423,7 @@ public class UserServiceTest : IDisposable
         // Arrange.
         const string password = "AbcAbc123";
         var user = _factory.CreateUsers(2, password)[0];
-        var dto = new AuthenticateAsyncReqDto
+        var dto = new AuthenticateReqDto
         {
             Username = user.Username,
             Password = password + "A"
@@ -449,7 +449,7 @@ public class UserServiceTest : IDisposable
         _appSettings.Value.MaxLoginFailedCount = 5;
         const string password = "AbcAbc123";
         var user = _factory.CreateUsers(2, password)[0];
-        var dto = new AuthenticateAsyncReqDto
+        var dto = new AuthenticateReqDto
         {
             Username = user.Username,
             Password = password + "A"
@@ -485,7 +485,7 @@ public class UserServiceTest : IDisposable
         _appSettings.Value.MaxLoginFailedCount = 5;
         const string password = "AbcAbc123";
         var user = _factory.CreateUsers(2, password)[0];
-        var dto = new AuthenticateAsyncReqDto
+        var dto = new AuthenticateReqDto
         {
             Username = user.Username,
             Password = password + "A"
@@ -693,7 +693,7 @@ public class UserServiceTest : IDisposable
         // Arrange.
         var user = _factory.CreateUsers(2, "AbcAbc123")[0];
 
-        var dto = new UpdateAsyncReqDto
+        var dto = new UpdateReqDto
         {
             Username = new UpdateStringField {NewValue = Guid.NewGuid().ToString()},
             GivenName = new UpdateStringField {NewValue = Guid.NewGuid().ToString()},
@@ -728,7 +728,7 @@ public class UserServiceTest : IDisposable
         // Arrange.
         var user = _factory.CreateUsers(2, "AbcAbc123")[0];
 
-        var dto = new UpdateAsyncReqDto
+        var dto = new UpdateReqDto
         {
             Username = null,
             GivenName = null,
@@ -762,7 +762,7 @@ public class UserServiceTest : IDisposable
     {
         // Arrange.
         var users = _factory.CreateUsers(2, "AbcAbc123");
-        var dto = new UpdateAsyncReqDto();
+        var dto = new UpdateReqDto();
 
         // Act.
         Task Act() => _service.UpdateAsync(users[0].Id, users[1].Id, dto);
@@ -782,7 +782,7 @@ public class UserServiceTest : IDisposable
         // Arrange.
         _factory.CreateUsers(2, "AbcAbc123");
         var userId = Guid.NewGuid();
-        var dto = new UpdateAsyncReqDto();
+        var dto = new UpdateReqDto();
 
         // Act.
         Task Act() => _service.UpdateAsync(userId, userId, dto);
@@ -801,7 +801,7 @@ public class UserServiceTest : IDisposable
     {
         // Arrange.
         var users = _factory.CreateUsers(2, "AbcAbc123");
-        var dto = new UpdateAsyncReqDto
+        var dto = new UpdateReqDto
         {
             Username = new UpdateStringField {NewValue = users[1].Username}
         };
@@ -825,7 +825,7 @@ public class UserServiceTest : IDisposable
         // Arrange.
         _appSettings.Value.MaxUnconfirmedEmailCount = 5;
         var user = _factory.CreateUsers(2, "AbcAbc123")[0];
-        var dto = new UpdateAsyncReqDto
+        var dto = new UpdateReqDto
         {
             Email = new UpdateStringField {NewValue = Guid.NewGuid() + "@example.com"}
         };
@@ -853,7 +853,7 @@ public class UserServiceTest : IDisposable
         // Arrange.
         _appSettings.Value.MaxUnconfirmedEmailCount = 5;
         var user = _factory.CreateUsers(2, "AbcAbc123")[0];
-        var dto = new UpdateAsyncReqDto
+        var dto = new UpdateReqDto
         {
             Email = new UpdateStringField {NewValue = Guid.NewGuid() + "@example.com"}
         };
@@ -884,7 +884,7 @@ public class UserServiceTest : IDisposable
     {
         // Arrange.
         var user = _factory.CreateUsers(2, "AbcAbc123")[0];
-        var dto = new UpdateAsyncReqDto
+        var dto = new UpdateReqDto
         {
             Email = new UpdateStringField {NewValue = user.Email}
         };
@@ -907,7 +907,7 @@ public class UserServiceTest : IDisposable
     {
         // Arrange.
         var users = _factory.CreateUsers(2, "AbcAbc123");
-        var dto = new UpdateAsyncReqDto
+        var dto = new UpdateReqDto
         {
             Email = new UpdateStringField {NewValue = Guid.NewGuid() + "@example.com"}
         };
@@ -940,7 +940,7 @@ public class UserServiceTest : IDisposable
         user.ExternalId = "test";
         user.ExternalIdentityProvider = "test";
         await _db.SaveChangesAsync();
-        var dto = new UpdateAsyncReqDto
+        var dto = new UpdateReqDto
         {
             Username = new UpdateStringField {NewValue = Guid.NewGuid().ToString()}
         };
@@ -965,7 +965,7 @@ public class UserServiceTest : IDisposable
         user.ExternalId = "test";
         user.ExternalIdentityProvider = "test";
         await _db.SaveChangesAsync();
-        var dto = new UpdateAsyncReqDto
+        var dto = new UpdateReqDto
         {
             GivenName = new UpdateStringField {NewValue = Guid.NewGuid().ToString()}
         };
@@ -990,7 +990,7 @@ public class UserServiceTest : IDisposable
         user.ExternalId = "test";
         user.ExternalIdentityProvider = "test";
         await _db.SaveChangesAsync();
-        var dto = new UpdateAsyncReqDto
+        var dto = new UpdateReqDto
         {
             FamilyName = new UpdateStringField {NewValue = Guid.NewGuid().ToString()}
         };
@@ -1015,7 +1015,7 @@ public class UserServiceTest : IDisposable
         user.ExternalId = "test";
         user.ExternalIdentityProvider = "test";
         await _db.SaveChangesAsync();
-        var dto = new UpdateAsyncReqDto
+        var dto = new UpdateReqDto
         {
             Password = new UpdateStringField {NewValue = Guid.NewGuid().ToString()}
         };
@@ -1041,7 +1041,7 @@ public class UserServiceTest : IDisposable
         user.ExternalId = "test";
         user.ExternalIdentityProvider = "test";
         await _db.SaveChangesAsync();
-        var dto = new UpdateAsyncReqDto
+        var dto = new UpdateReqDto
         {
             Email = new UpdateStringField {NewValue = Guid.NewGuid().ToString() + "@example.com"}
         };
@@ -1193,7 +1193,7 @@ public class UserServiceTest : IDisposable
         var user = _factory.CreateUsers(2, "AbcAbc123")[0];
         var emailService = Substitute.For<IEmailService>();
         var toEmail = "";
-        var dto = new PasswordResetAsyncReqDto {Email = user.Email};
+        var dto = new PasswordResetReqDto {Email = user.Email};
         emailService
             .SendAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Any<string>(), Arg.Any<string>())
@@ -1227,7 +1227,7 @@ public class UserServiceTest : IDisposable
     {
         // Arrange.
         _factory.CreateUsers(2, "AbcAbc123");
-        var dto = new PasswordResetAsyncReqDto {Email = Guid.NewGuid() + "@example.com"};
+        var dto = new PasswordResetReqDto {Email = Guid.NewGuid() + "@example.com"};
 
         // Act.
         Task Act() => _service.PasswordResetAsync(dto);
@@ -1248,7 +1248,7 @@ public class UserServiceTest : IDisposable
         // Arrange.
         _appSettings.Value.MaxResetPasswordCount = 5;
         var user = _factory.CreateUsers(2, "AbcAbc123")[0];
-        var dto = new PasswordResetAsyncReqDto {Email = user.Email};
+        var dto = new PasswordResetReqDto {Email = user.Email};
 
         for (var i = 0; i < _appSettings.Value.MaxResetPasswordCount; i++)
             await _service.PasswordResetAsync(dto);
@@ -1271,7 +1271,7 @@ public class UserServiceTest : IDisposable
         // Arrange.
         _appSettings.Value.MaxResetPasswordCount = 5;
         var user = _factory.CreateUsers(2, "AbcAbc123")[0];
-        var dto = new PasswordResetAsyncReqDto {Email = user.Email};
+        var dto = new PasswordResetReqDto {Email = user.Email};
 
         for (var i = 0; i < _appSettings.Value.MaxResetPasswordCount; i++)
             await _service.PasswordResetAsync(dto);
@@ -1296,7 +1296,7 @@ public class UserServiceTest : IDisposable
     {
         // Arrange.
         var user = _factory.CreateUsers(2, "AbcAbc123")[0];
-        var dto = new PasswordResetAsyncReqDto {Email = user.Email};
+        var dto = new PasswordResetReqDto {Email = user.Email};
         var emailService = Substitute.For<IEmailService>();
         emailService
             .SendAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),

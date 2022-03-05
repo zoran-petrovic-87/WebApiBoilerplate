@@ -8,7 +8,7 @@ namespace WebApi.Services.DataTransferObjects.UserService;
 /// <summary>
 /// Data transfer object for the <see cref="IUserService.GetDetailsAsync"/> response.
 /// </summary>
-public class GetDetailsAsyncResDto
+public class GetDetailsResDto
 {
     /// <summary>
     /// Gets or sets the identifier.

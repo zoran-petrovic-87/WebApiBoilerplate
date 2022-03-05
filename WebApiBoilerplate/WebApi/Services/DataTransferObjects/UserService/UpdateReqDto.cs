@@ -5,7 +5,7 @@ namespace WebApi.Services.DataTransferObjects.UserService;
 /// <summary>
 /// Data transfer object for the <see cref="IUserService.UpdateAsync"/> request.
 /// </summary>
-public class UpdateAsyncReqDto
+public class UpdateReqDto
 {
     /// <summary>
     /// Gets or sets the username.

@@ -5,7 +5,7 @@ namespace WebApi.Services.DataTransferObjects.UserService;
 /// <summary>
 /// Data transfer object for the <see cref="IUserService.AuthenticateAsync"/> request.
 /// </summary>
-public class AuthenticateAsyncReqDto
+public class AuthenticateReqDto
 {
     /// <summary>
     /// Gets or sets the username.

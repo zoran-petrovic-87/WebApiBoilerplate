@@ -46,7 +46,7 @@ public class ExternalUserController : ControllerBase
     /// <returns>The authentication token.</returns>
     [Authorize(AuthenticationSchemes = "oidc-google")]
     [HttpGet("loginWithGoogleToken")]
-    public async Task<ActionResult<AuthenticateAsyncResDto>> LoginWithGoogleToken()
+    public async Task<ActionResult<AuthenticateResDto>> LoginWithGoogleToken()
     {
         if (User.Identity is not { IsAuthenticated: true }) return BadRequest();
 
